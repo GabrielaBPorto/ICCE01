@@ -3,6 +3,7 @@
 #include <string.h>
 #include <float.h>
 #include <stdarg.h>
+#include <math.h>
 
 typedef struct intervalo {
     double inferior;
@@ -60,8 +61,8 @@ void leituraVariaveis(intervalo *variaveis, int n){
     char lixo[4];
     for(int i=0; i< n; i++){
         scanf("%s %lf\n",lixo, &(variaveis[i].x));
-        variaveis[i].inferior = variaveis[i].x - DBL_EPSILON;
-        variaveis[i].superior = variaveis[i].x + DBL_EPSILON;
+        variaveis[i].inferior = nextafter(variaveis[i].x, -INFINITY);
+        variaveis[i].superior = nextafter(variaveis[i].x, INFINITY);
     }
 }
 
@@ -102,10 +103,6 @@ int main() {
     leituraVariaveis(variaveis,numeroVariaveis);
     leituraOperacoes(variaveis,numeroOperacoes,numeroVariaveis);
     imprimeIntervalo(variaveis,numeroVariaveis+numeroOperacoes);
-    for(int i=0; i<numeroVariaveis; i++){
-        printf("Maximum of three numbers: (%lf, %lf, %lf) = %lf\n", variaveis[i].inferior,variaveis[i].x, variaveis[i].superior, max(variaveis[i].inferior, variaveis[i].x, variaveis[i].superior));
-        printf("Minimum of three numbers: (%lf, %lf, %lf) = %lf\n", variaveis[i].inferior,variaveis[i].x, variaveis[i].superior,min(variaveis[i].inferior, variaveis[i].x, variaveis[i].superior));
-    }
 
 
 }
