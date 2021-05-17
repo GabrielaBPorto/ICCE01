@@ -27,7 +27,7 @@ void divisao(intervalo *vetor, int i, int x, int y);
 void subtracao(intervalo *vetor, int i, int x, int y);
 void soma(intervalo *vetor, int i, int x, int y);
 
-
+int verificaIntervalos(intervalo intervalo);
 
 //------------------------------------------------------------------------------
 #endif

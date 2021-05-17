@@ -123,10 +123,39 @@ int leituraOperacoes(intervalo *variaveis,int n, int m){
                 break;
             default:
                 printf("Operação inválida\n");
-                return 0;
+                return -1;
                 break;
         }
+
+        if (verificaIntervalos(variaveis[i]))
+            return -1;
+
     }
     return 1;
 }
 
+int verificaIntervalos(intervalo intervalo){
+
+    printf ("Inf: %d Sup: %d\n",isinf(intervalo.inferior), isinf(intervalo.superior));
+
+    if (isnan(intervalo.superior) || isnan(intervalo.inferior)){
+        return -1;
+    }
+
+    if (intervalo.inferior > intervalo.superior){
+        return -1;
+    }
+
+    if (isinf(intervalo.inferior) == -1  && isinf(intervalo.superior) == -1){
+        return -1;
+    }
+
+    if (isinf(intervalo.inferior) == 1  && isinf(intervalo.superior) == -1){
+        return -1;
+    }
+
+    if (isinf(intervalo.inferior) == 1  && isinf(intervalo.superior) == 1){
+        return -1;
+    }
+    return 0;
+}
