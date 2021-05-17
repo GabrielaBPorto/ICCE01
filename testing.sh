@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p results
 make clean
 make
 
