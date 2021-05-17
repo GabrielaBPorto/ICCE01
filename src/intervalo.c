@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdarg.h>
 #include "intervalo.h"
+#include "floatType.h"
+
 
 double max(int numeroElementos, ...){
     double max, cur;
@@ -127,3 +129,4 @@ int leituraOperacoes(intervalo *variaveis,int n, int m){
     }
     return 1;
 }
+
