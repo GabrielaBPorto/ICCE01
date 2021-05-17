@@ -10,11 +10,11 @@
 	2.2. Caso um intervalo não seja unitário, deve ser printado novamente.
 	2.3. Importante printar uma linha avisando 'Intervalos não unitários' ao entrar na função
 3. Gerar script para testar o código com todos os casos de teste
-	3.1. Pegar todos os .in disponíveis em https://moodle.c3sl.ufpr.br/mod/folder/view.php?id=27968
-	3.2. Realizar script, como os que fizemos para ML, para rodar todos os testes
+	3.1. Pegar todos os .in disponíveis em https://moodle.c3sl.ufpr.br/mod/folder/view.php?id=27968 [DONE]
+	3.2. Realizar script, como os que fizemos para ML, para rodar todos os testes [DONE]
 	3.3. IMPORTANTE: Os resultados não precisam estar exatos com os dos professores pois diferenças de
 			implementação podem levar a algumas diferenças de valores
-4. Criar arquivos .c e .h para que o arquivo principal contenha apenas o fluxo de execução do código
+4. Criar arquivos .c e .h para que o arquivo principal contenha apenas o fluxo de execução do código [DONE]
 	4.1. Atualizar o makefile para fazer uso destes arquivos. [DONE]
 
 
