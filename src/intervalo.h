@@ -12,6 +12,7 @@ typedef struct intervalo {
     double inferior;
     double superior;
     double x;
+    int isUnitario = 1;
 }intervalo;
 
 

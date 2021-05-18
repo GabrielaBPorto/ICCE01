@@ -5,7 +5,6 @@
 #include <math.h>
 #include <stdarg.h>
 #include "intervalo.h"
-#include "floatType.h"
 
 
 double max(int numeroElementos, ...){
@@ -52,6 +51,7 @@ void imprimeIntervalo(intervalo *vetor, int m){
     for(int i=0;i<m;i++){
         printf("x:%.20lf inf:%.20lf sup:%.20lf\n", vetor[i].x,vetor[i].inferior,vetor[i].superior);
     }
+
     return;
 }
 
@@ -129,6 +129,7 @@ int leituraOperacoes(intervalo *variaveis,int n, int m){
 
         if (verificaIntervalos(variaveis[i]))
             return -1;
+        verificaIntervaloUnitario(variaveis[i]);
 
     }
     return 0;
@@ -157,5 +158,36 @@ int verificaIntervalos(intervalo intervalo){
     if (isinf(intervalo.inferior) == 1  && isinf(intervalo.superior) == 1){
         return -1;
     }
+    return 0;
+}
+
+
+void verificaIntervaloUnitario(intervalo intervalo){
+    if(!AlmostEqualRelative(intervalo.inferior,intervalo.superior)){
+        intervalo.isUnitario = 0;
+    }
+    else{
+        intervalo.isUnitario = 1;
+    }
+}
+
+int AlmostEqualRelative(double A, double B){
+    // Calculate the difference.
+    double diff, largest, relEpsilon;
+    diff = fabs(A - B);
+    A = fabs(A);
+    B = fabs(B);
+    // Find the largest
+    largest = (B > A) ? B : A;
+    relEpsilon = largest * FLT_EPSILON;
+
+    printf("\tThe difference: ");
+    //printFloat_t(diff);
+    
+    printf("\trel. Epsilon:   ");
+    //printFloat_t(relEpsilon);
+    
+    if (diff <= relEpsilon)
+        return 1;
     return 0;
 }
