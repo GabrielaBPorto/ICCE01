@@ -5,9 +5,8 @@
 			devemos retornar -1 e encerrar a execução atual do programa 
 	4. Realizar verificação do retorno desta função no main com o mesmo objetivo da anterior [DONE]
 2. Implementar função para verificar se alguma operação retorna um intervalo não unitário
-	1. A função deve implementar uma das estratégias de Epsilon e/ou ULP para comparar operadores
-			de ponto flutuante (i.e., comparação de valores)
-	2. Caso um intervalo não seja unitário, deve ser printado novamente.
+	1. A função deve implementar uma das estratégias de Epsilon e/ou ULP para comparar operadores de ponto flutuante (i.e., comparação de valores) [DONE]
+	2. Caso um intervalo não seja unitário, deve ser printado novamente. [DONE]
 	3. Importante printar uma linha avisando 'Intervalos não unitários' ao entrar na função
 3. Gerar script para testar o código com todos os casos de teste [DONE]
 	1. Pegar todos os .in disponíveis em https://moodle.c3sl.ufpr.br/mod/folder/view.php?id=27968 [DONE]

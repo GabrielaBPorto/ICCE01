@@ -20,7 +20,8 @@ int main() {
         return -1;
     }
 
-    imprimeIntervalo(variaveis,numeroVariaveis+numeroOperacoes);
+    imprimeIntervalos(variaveis,numeroVariaveis+numeroOperacoes);
+    imprimeNaoUnitarios(variaveis, numeroVariaveis, numeroOperacoes);
 
     printf("%d-%d\n", numeroVariaveis,numeroOperacoes);
     return 0;

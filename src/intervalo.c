@@ -47,12 +47,21 @@ double min(int numeroElementos, ...) {
     return min;
 }
 
-void imprimeIntervalo(intervalo *vetor, int m){
+void imprimeIntervalos(intervalo *vetor, int m){
     for(int i=0;i<m;i++){
         printf("x:%.20lf inf:%.20lf sup:%.20lf\n", vetor[i].x,vetor[i].inferior,vetor[i].superior);
     }
 
     return;
+}
+
+void imprimeNaoUnitarios(intervalo *vetor, int n, int m){
+    printf("Intervalos não unitários");
+    for(int i=n;i<m;i++){
+        if(!vetor[i].isUnitario){
+            printf("x:%.20lf inf:%.20lf sup:%.20lf\n", vetor[i].x,vetor[i].inferior,vetor[i].superior);
+        }
+    }
 }
 
 void leituraVariaveis(intervalo *variaveis, int n){

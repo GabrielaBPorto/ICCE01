@@ -12,14 +12,16 @@ typedef struct intervalo {
     double inferior;
     double superior;
     double x;
-    int isUnitario = 1;
+    int isUnitario;
 }intervalo;
 
 
 double max(int numeroElementos, ...);
 double min(int numeroElementos, ...);
 
-void imprimeIntervalo(intervalo *vetor, int m);
+void imprimeIntervalos(intervalo *vetor, int m);
+void imprimeNaoUnitarios(intervalo *vetor, int n, int m);
+
 void leituraVariaveis(intervalo *variaveis, int n);
 int leituraOperacoes(intervalo *variaveis,int n, int m);
 
@@ -29,6 +31,8 @@ void subtracao(intervalo *vetor, int i, int x, int y);
 void soma(intervalo *vetor, int i, int x, int y);
 
 int verificaIntervalos(intervalo intervalo);
+void verificaIntervaloUnitario(intervalo intervalo);
+int AlmostEqualRelative(double A, double B);
 
 //------------------------------------------------------------------------------
 #endif
