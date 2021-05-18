@@ -1,9 +1,9 @@
-1. Verificar intervalos inválidos após realizar as operações na função leituraOperacoes
-	1.1. Trocar continues por breaks para poder ir para a verificação
-	1.2. Criar função auxiliar para realizar verificação de acordo com o princípio da responsabilidade
-	1.3. Alterar o retorno da função leituraOperacoes para int, pois caso dê erro na verificação, 
-			devemos retornar -1 e encerrar a execução atual do programa
-	1.4. Realizar verificação do retorno desta função no main com o mesmo objetivo da anterior
+1. Verificar intervalos inválidos após realizar as operações na função leituraOperacoes [DONE]
+	1.1. Trocar continues por breaks para poder ir para a verificação [DONE]
+	1.2. Criar função auxiliar para realizar verificação de acordo com o princípio da responsabilidade [DONE]
+	1.3. Alterar o retorno da função leituraOperacoes para int, pois caso dê erro na verificação, [DONE]  
+			devemos retornar -1 e encerrar a execução atual do programa 
+	1.4. Realizar verificação do retorno desta função no main com o mesmo objetivo da anterior [DONE]
 2. Implementar função para verificar se alguma operação retorna um intervalo não unitário
 	2.1. A função deve implementar uma das estratégias de Epsilon e/ou ULP para comparar operadores
 			de ponto flutuante (i.e., comparação de valores)

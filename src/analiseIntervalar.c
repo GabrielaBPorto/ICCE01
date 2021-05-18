@@ -15,10 +15,13 @@ int main() {
     memset(variaveis, 0, sizeof(variaveis));
 
     leituraVariaveis(variaveis,numeroVariaveis);
-    if(!leituraOperacoes(variaveis,numeroOperacoes,numeroVariaveis)){
+    if(leituraOperacoes(variaveis,numeroOperacoes,numeroVariaveis)){
         printf("ERROOO");
+        return -1;
     }
+
     imprimeIntervalo(variaveis,numeroVariaveis+numeroOperacoes);
 
     printf("%d-%d\n", numeroVariaveis,numeroOperacoes);
+    return 0;
 }

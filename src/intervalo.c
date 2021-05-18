@@ -131,7 +131,7 @@ int leituraOperacoes(intervalo *variaveis,int n, int m){
             return -1;
 
     }
-    return 1;
+    return 0;
 }
 
 int verificaIntervalos(intervalo intervalo){
