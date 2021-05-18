@@ -1,21 +1,21 @@
 1. Verificar intervalos inválidos após realizar as operações na função leituraOperacoes [DONE]
-	1.1. Trocar continues por breaks para poder ir para a verificação [DONE]
-	1.2. Criar função auxiliar para realizar verificação de acordo com o princípio da responsabilidade [DONE]
-	1.3. Alterar o retorno da função leituraOperacoes para int, pois caso dê erro na verificação, [DONE]  
+	1. Trocar continues por breaks para poder ir para a verificação [DONE]
+	2. Criar função auxiliar para realizar verificação de acordo com o princípio da responsabilidade [DONE]
+	3. Alterar o retorno da função leituraOperacoes para int, pois caso dê erro na verificação, [DONE]  
 			devemos retornar -1 e encerrar a execução atual do programa 
-	1.4. Realizar verificação do retorno desta função no main com o mesmo objetivo da anterior [DONE]
+	4. Realizar verificação do retorno desta função no main com o mesmo objetivo da anterior [DONE]
 2. Implementar função para verificar se alguma operação retorna um intervalo não unitário
-	2.1. A função deve implementar uma das estratégias de Epsilon e/ou ULP para comparar operadores
+	1. A função deve implementar uma das estratégias de Epsilon e/ou ULP para comparar operadores
 			de ponto flutuante (i.e., comparação de valores)
-	2.2. Caso um intervalo não seja unitário, deve ser printado novamente.
-	2.3. Importante printar uma linha avisando 'Intervalos não unitários' ao entrar na função
+	2. Caso um intervalo não seja unitário, deve ser printado novamente.
+	3. Importante printar uma linha avisando 'Intervalos não unitários' ao entrar na função
 3. Gerar script para testar o código com todos os casos de teste [DONE]
-	3.1. Pegar todos os .in disponíveis em https://moodle.c3sl.ufpr.br/mod/folder/view.php?id=27968 [DONE]
-	3.2. Realizar script, como os que fizemos para ML, para rodar todos os testes [DONE]
-	3.3. IMPORTANTE: Os resultados não precisam estar exatos com os dos professores pois diferenças de
+	1. Pegar todos os .in disponíveis em https://moodle.c3sl.ufpr.br/mod/folder/view.php?id=27968 [DONE]
+	2. Realizar script, como os que fizemos para ML, para rodar todos os testes [DONE]
+	3. IMPORTANTE: Os resultados não precisam estar exatos com os dos professores pois diferenças de
 			implementação podem levar a algumas diferenças de valores
 4. Criar arquivos .c e .h para que o arquivo principal contenha apenas o fluxo de execução do código [DONE]
-	4.1. Atualizar o makefile para fazer uso destes arquivos. [DONE]
+	1. Atualizar o makefile para fazer uso destes arquivos. [DONE]
 
 
 
