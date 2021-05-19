@@ -3,6 +3,7 @@
 mkdir -p results
 make clean
 make
+rm results/*
 
 for i in {0..9}
  do
