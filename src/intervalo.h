@@ -31,8 +31,7 @@ void subtracao(intervalo *vetor, int i, int x, int y);
 void soma(intervalo *vetor, int i, int x, int y);
 
 int verificaIntervalos(intervalo intervalo);
-void verificaIntervaloUnitario(intervalo intervalo);
-int AlmostEqualRelative(double A, double B);
+int igualdadeRelativa(double A, double B);
 
 //------------------------------------------------------------------------------
 #endif

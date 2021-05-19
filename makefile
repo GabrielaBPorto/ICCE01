@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -O3 -lm
+CFLAGS = -g -Wall -O0 -lm
 CXX=gcc -std=c99
 
 analiseIntervalar: src/intervalo.c src/intervalo.h src/analiseIntervalar.c  

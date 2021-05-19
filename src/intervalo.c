@@ -11,19 +11,19 @@
 // ...: Parâmetros variádicos
 double max(int numeroElementos, ...){
     double max, cur;
-    va_list valist;
-    va_start(valist, numeroElementos);
+    va_list listaArgumentos;
+    va_start(listaArgumentos, numeroElementos);
     
     max = DBL_MIN_EXP;
     
     for(int i=0; i<numeroElementos; i++)
     {
-        cur = va_arg(valist, double); // Get next elements in the list
+        cur = va_arg(listaArgumentos, double);
         if(max < cur)
             max = cur;
     }
     
-    va_end(valist); // Clean memory assigned by valist
+    va_end(listaArgumentos);
     
     return max;
 }
@@ -33,19 +33,19 @@ double max(int numeroElementos, ...){
 // ...: Parâmetros variádicos
 double min(int numeroElementos, ...) {
     double min, cur;
-    va_list valist;
-    va_start(valist, numeroElementos);
+    va_list listaArgumentos;
+    va_start(listaArgumentos, numeroElementos);
     
     min = DBL_MAX;
     
     for(int i=0; i<numeroElementos; i++)
     {
-        cur = va_arg(valist, double);
+        cur = va_arg(listaArgumentos, double);
         if(min > cur)
             min = cur;
     }
     
-    va_end(valist);
+    va_end(listaArgumentos);
     
     return min;
 }
@@ -55,7 +55,7 @@ double min(int numeroElementos, ...) {
 // int tamanho: tamanho do vetor de intervalos
 void imprimeIntervalos(intervalo *vetor, int tamanho){
     for(int i=0;i<tamanho;i++){
-        printf("x%d - [inf:%.20e sup:%.20e]\n", i+1,vetor[i].inferior,vetor[i].superior);
+        printf("x%d - [inf:%.16e sup:%.16e]\n", i+1,vetor[i].inferior,vetor[i].superior);
     }
 
     return;
@@ -69,7 +69,7 @@ void imprimeNaoUnitarios(intervalo *vetor, int quantidadeVariaveis, int quantida
     printf("Intervalos não unitários\n");
     for(int i = quantidadeVariaveis; i < quantidadeVariaveis + quantidadeOperacoes; i++){
         if(!vetor[i].isUnitario){
-            printf("x%d - [inf:%.20e sup:%.20e]\n", i+1,vetor[i].inferior,vetor[i].superior);
+            printf("x%d - [inf:%.16e sup:%.16e]\n", i+1,vetor[i].inferior,vetor[i].superior);
         }
     }
 }
@@ -87,66 +87,83 @@ void leituraVariaveis(intervalo *variaveis, int quantidadeVariaveis){
 }
 
 // Função auxiliar para realizar as divisões
-
-void divisao(intervalo *vetor, int i, int x, int y){
-    vetor[i].inferior = min(4,vetor[x-1].inferior * 1/vetor[y-1].inferior,
-                                vetor[x-1].inferior * 1/vetor[y-1].superior,
-                                vetor[x-1].superior * 1/vetor[y-1].inferior,
-                                vetor[x-1].superior * 1/vetor[y-1].superior);
-    vetor[i].superior = max(4,vetor[x-1].inferior * 1/vetor[y-1].inferior,
-                                vetor[x-1].inferior * 1/vetor[y-1].superior,
-                                vetor[x-1].superior * 1/vetor[y-1].inferior,
-                                vetor[x-1].superior * 1/vetor[y-1].superior);
+// intervalo *vetor: vetor de intervalos
+// int indiceResultante: indice para salvar o resultado da operação
+// int operandoA: indice do primeiro operando da operação
+// int operandoB: indice do segundo operando da operação
+void divisao(intervalo *vetor, int indiceResultante, int operandoA, int operandoB){
+    vetor[indiceResultante].inferior = min(4,vetor[operandoA-1].inferior * 1/vetor[operandoB-1].inferior,
+                                vetor[operandoA-1].inferior * 1/vetor[operandoB-1].superior,
+                                vetor[operandoA-1].superior * 1/vetor[operandoB-1].inferior,
+                                vetor[operandoA-1].superior * 1/vetor[operandoB-1].superior);
+    vetor[indiceResultante].superior = max(4,vetor[operandoA-1].inferior * 1/vetor[operandoB-1].inferior,
+                                vetor[operandoA-1].inferior * 1/vetor[operandoB-1].superior,
+                                vetor[operandoA-1].superior * 1/vetor[operandoB-1].inferior,
+                                vetor[operandoA-1].superior * 1/vetor[operandoB-1].superior);
 }
 
 // Função auxiliar para realizar as multiplicações
-
-void multiplicacao(intervalo *vetor, int i, int x, int y){
-    vetor[i].inferior = min(4,vetor[x-1].inferior * vetor[y-1].inferior,
-                                vetor[x-1].inferior * vetor[y-1].superior,
-                                vetor[x-1].superior * vetor[y-1].inferior,
-                                vetor[x-1].superior * vetor[y-1].superior);
-    vetor[i].superior = max(4,vetor[x-1].inferior * vetor[y-1].inferior,
-                                vetor[x-1].inferior * vetor[y-1].superior,
-                                vetor[x-1].superior * vetor[y-1].inferior,
-                                vetor[x-1].superior * vetor[y-1].superior);
+// intervalo *vetor: vetor de intervalos
+// int indiceResultante: indice para salvar o resultado da operação
+// int operandoA: indice do primeiro operando da operação
+// int operandoB: indice do segundo operando da operação
+void multiplicacao(intervalo *vetor, int indiceResultante, int operandoA, int operandoB){
+    vetor[indiceResultante].inferior = min(4,vetor[operandoA-1].inferior * vetor[operandoB-1].inferior,
+                                vetor[operandoA-1].inferior * vetor[operandoB-1].superior,
+                                vetor[operandoA-1].superior * vetor[operandoB-1].inferior,
+                                vetor[operandoA-1].superior * vetor[operandoB-1].superior);
+    vetor[indiceResultante].superior = max(4,vetor[operandoA-1].inferior * vetor[operandoB-1].inferior,
+                                vetor[operandoA-1].inferior * vetor[operandoB-1].superior,
+                                vetor[operandoA-1].superior * vetor[operandoB-1].inferior,
+                                vetor[operandoA-1].superior * vetor[operandoB-1].superior);
 }
 
 // Função auxiliar para realizar a subtração
-void subtracao(intervalo *vetor, int i, int x, int y){
-    vetor[i].inferior = min(1, vetor[x-1].inferior - vetor[y-1].superior);
-    vetor[i].superior = max(1, vetor[x-1].superior - vetor[y-1].inferior);
+// intervalo *vetor: vetor de intervalos
+// int indiceResultante: indice para salvar o resultado da operação
+// int operandoA: indice do primeiro operando da operação
+// int operandoB: indice do segundo operando da operação
+void subtracao(intervalo *vetor, int indiceResultante, int operandoA, int operandoB){
+    vetor[indiceResultante].inferior = min(1, vetor[operandoA-1].inferior + vetor[operandoB-1].superior);
+    vetor[indiceResultante].superior = max(1, vetor[operandoA-1].superior + vetor[operandoB-1].inferior);
 }
 
 // Função auxiliar para realizar a soma
-void soma(intervalo *vetor, int i, int x, int y){
-    vetor[i].inferior = min(1, vetor[x-1].inferior + vetor[y-1].inferior);
-    vetor[i].superior = max(1, vetor[x-1].superior + vetor[y-1].superior);
+// intervalo *vetor: vetor de intervalos
+// int indiceResultante: indice para salvar o resultado da operação
+// int operandoA: indice do primeiro operando da operação
+// int operandoB: indice do segundo operando da operação
+void soma(intervalo *vetor, int indiceResultante, int operandoA, int operandoB){
+    vetor[indiceResultante].inferior = min(1, vetor[operandoA-1].inferior + vetor[operandoB-1].inferior);
+    vetor[indiceResultante].superior = max(1, vetor[operandoA-1].superior + vetor[operandoB-1].superior);
 }
 
 // Função para realizar o cálculo das operações
+// intervalo *variaveis: vetor de intervalos para realizar e salvar operações
+// int quantidadeOperacoes: quantidade de operações a serem realizadas
+// int quantidadeVariaveis: quantidade de variaveis lidas
 int leituraOperacoes(intervalo *variaveis,int quantidadeOperacoes, int quantidadeVariaveis){
     char lixo[6];
     char lixoA, lixoB;
     char operacao;
-    int operadorA, operadorB;
+    int operandoA, operandoB;
     for(int i=quantidadeVariaveis; i<quantidadeOperacoes+quantidadeVariaveis; i++){
         fgets(lixo,6,stdin);
-        scanf("%c%d %c %c%d\n",&lixoA,&operadorA,&operacao,&lixoB,&operadorB);
+        scanf("%c%d %c %c%d\n",&lixoA,&operandoA,&operacao,&lixoB,&operandoB);
 
         switch(operacao)
         {
             case '+':
-                soma(variaveis,i, operadorA,operadorB);
+                soma(variaveis,i, operandoA,operandoB);
                 break;
             case '-':
-                subtracao(variaveis,i, operadorA,operadorB);
+                subtracao(variaveis,i, operandoA,operandoB);
                 break;
             case '*':
-                multiplicacao(variaveis,i,operadorA,operadorB);
+                multiplicacao(variaveis,i,operandoA,operandoB);
                 break;
             case '/':
-                divisao(variaveis,i,operadorA,operadorB);
+                divisao(variaveis,i,operandoA,operandoB);
                 break;
             default:
                 printf("Operação inválida\n");
@@ -156,13 +173,13 @@ int leituraOperacoes(intervalo *variaveis,int quantidadeOperacoes, int quantidad
 
         if (verificaIntervalos(variaveis[i]))
             return -1;
-        verificaIntervaloUnitario(variaveis[i]);
-
+        variaveis[i].isUnitario = igualdadeRelativa(variaveis[i].inferior, variaveis[i].superior);
     }
     return 0;
 }
 
 // Função auxiliar para verificar se um intervalo de operação é ou não válido
+// intervalo intervalo: intervalo para verificação de validade
 int verificaIntervalos(intervalo intervalo){
 
     if (isnan(intervalo.superior) || isnan(intervalo.inferior)){
@@ -187,28 +204,19 @@ int verificaIntervalos(intervalo intervalo){
     return 0;
 }
 
-// Função para verificar se um intervalo de operação é unitário ou não
-void verificaIntervaloUnitario(intervalo intervalo){
-    if(!AlmostEqualRelative(intervalo.inferior,intervalo.superior)){
-        intervalo.isUnitario = 0;
-    }
-    else{
-        intervalo.isUnitario = 1;
-    }
-}
-
 // Função auxiliar para conferir relatividade entre intervalos
-int AlmostEqualRelative(double A, double B){
-    // Calculate the difference.
-    double diff, largest, relEpsilon;
-    diff = fabs(A - B);
-    A = fabs(A);
-    B = fabs(B);
-    // Find the largest
-    largest = (B > A) ? B : A;
-    relEpsilon = largest * DBL_EPSILON;
+// double operandoA: um dos operandos para verificação de igualdade
+// double operandoB: um dos operandos para verificação de igudalde
+int igualdadeRelativa(double operandoA, double operandoB){
+    double diferenca, maioroperando, epsilonRelativo;
+    diferenca = fabs(operandoA - operandoB);
+    operandoA = fabs(operandoA);
+    operandoB = fabs(operandoB);
+
+    maioroperando = (operandoB > operandoA) ? operandoB : operandoA;
+    epsilonRelativo = maioroperando * DBL_EPSILON;
     
-    if (diff <= relEpsilon)
+    if (diferenca <= epsilonRelativo)
         return 1;
     return 0;
 }
