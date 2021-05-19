@@ -10,13 +10,13 @@
 //Função que imprime output
 void printResults(dadosIntervalar_t dados){
     for(int i=0;i<(dados.quantidadeVariavel + dados.quantidadeOperacao);i++){
-        printf("X%d = [      %.20e,       %.20e]\n", i+1,dados.intervalos[i].inferior, dados.intervalos[i].superior);
+        printf("X%d = [      %.8e,       %.8e]\n", i+1,dados.intervalos[i].inferior, dados.intervalos[i].superior);
     }
 
     printf("\nNão unitários:\n");
     for(int i = dados.quantidadeVariavel; i < (dados.quantidadeVariavel + dados.quantidadeOperacao); i++){
         if(!dados.intervalos[i].unitary){
-            printf("X%d = [      %.20e,       %.20e]\n", i+1,dados.intervalos[i].inferior,dados.intervalos[i].superior);
+            printf("X%d = [      %.8e,       %.8e]\n", i+1,dados.intervalos[i].inferior,dados.intervalos[i].superior);
         }
     }
     return;
@@ -26,7 +26,7 @@ void printResults(dadosIntervalar_t dados){
 void leituraVariaveis(dadosIntervalar_t dados){
     double value;
     char temp[4];
-    for(int i=0; i< (dados.quantidadeVariavel + dados.quantidadeOperacao); i++){
+    for(int i=0; i< dados.quantidadeVariavel; i++){
         scanf("%s %lf\n",temp, &value);
         dados.intervalos[i].inferior = nextafter(value, -INFINITY);
         dados.intervalos[i].superior = nextafter(value, INFINITY);
@@ -40,7 +40,7 @@ int leituraOperacoes(dadosIntervalar_t dados){
     char tempA, tempB;
     char operacao;
     int variavelA, variavelB;
-    for(int i=dados.quantidadeVariavel; i<dados.quantidadeOperacao+dados.quantidadeVariavel; i++){
+    for(int i=dados.quantidadeVariavel; i<(dados.quantidadeOperacao+dados.quantidadeVariavel); i++){
         fgets(temp,6,stdin);
         scanf("%c%d %c %c%d\n",&tempA,&variavelA,&operacao,&tempB,&variavelB);
         dados.intervalos[i].unitary = 1;

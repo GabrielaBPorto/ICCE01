@@ -22,8 +22,7 @@ void printResults(dadosIntervalar_t dados);
 void leituraVariaveis(dadosIntervalar_t dados);
 int leituraOperacoes(dadosIntervalar_t dados);
 
-int verificaIntervalos(intervalo_t intervalo);
-void verificaIntervaloUnitario(intervalo_t intervalo);
+int checkIntervalData(dadosIntervalar_t dados, int posicaoAtual);
 int relativoEpsilon(double A, double B);
 int relativoUlps(double valorA, double valorB, int maxULPs);
 

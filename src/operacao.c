@@ -47,14 +47,14 @@ double min(int numeroElementos, ...) {
 
 //operacao de divisao
 void divide(dadosIntervalar_t dados, int i, int variavelA, int variavelB){
-	dados.intervalos[i].superior = max(4,dados.intervalos[variavelA-1].inferior * 1/dados.intervalos[variavelB-1].inferior,
-                                dados.intervalos[variavelA-1].inferior * 1/dados.intervalos[variavelB-1].superior,
-                                dados.intervalos[variavelA-1].superior * 1/dados.intervalos[variavelB-1].inferior,
-                                dados.intervalos[variavelA-1].superior * 1/dados.intervalos[variavelB-1].superior);
-    dados.intervalos[i].inferior = min(4,dados.intervalos[variavelA-1].inferior * 1/dados.intervalos[variavelB-1].inferior,
-                                dados.intervalos[variavelA-1].inferior * 1/dados.intervalos[variavelB-1].superior,
-                                dados.intervalos[variavelA-1].superior * 1/dados.intervalos[variavelB-1].inferior,
-                                dados.intervalos[variavelA-1].superior * 1/dados.intervalos[variavelB-1].superior);
+	dados.intervalos[i].superior = max(4,dados.intervalos[variavelA-1].inferior * 1/(dados.intervalos[variavelB-1].inferior),
+                                dados.intervalos[variavelA-1].inferior * 1/(dados.intervalos[variavelB-1].superior),
+                                dados.intervalos[variavelA-1].superior * 1/(dados.intervalos[variavelB-1].inferior),
+                                dados.intervalos[variavelA-1].superior * 1/(dados.intervalos[variavelB-1].superior));
+    dados.intervalos[i].inferior = min(4,dados.intervalos[variavelA-1].inferior * 1/(dados.intervalos[variavelB-1].inferior),
+                                dados.intervalos[variavelA-1].inferior * 1/(dados.intervalos[variavelB-1].superior),
+                                dados.intervalos[variavelA-1].superior * 1/(dados.intervalos[variavelB-1].inferior),
+                                dados.intervalos[variavelA-1].superior * 1/(dados.intervalos[variavelB-1].superior));
 }
 
 // operacao de multiplicao
@@ -67,6 +67,7 @@ void multiplication(dadosIntervalar_t dados, int i, int variavelA, int variavelB
                                 dados.intervalos[variavelA-1].inferior * dados.intervalos[variavelB-1].superior,
                                 dados.intervalos[variavelA-1].superior * dados.intervalos[variavelB-1].inferior,
                                 dados.intervalos[variavelA-1].superior * dados.intervalos[variavelB-1].superior);
+
 }
 
 // operação de subtracao

@@ -11,7 +11,6 @@ int main() {
     scanf("%d %d\n",&data.quantidadeVariavel,&data.quantidadeOperacao);
 
     data.intervalos = (intervalo_t *) malloc((data.quantidadeVariavel + data.quantidadeOperacao) * sizeof(intervalo_t));
-    memset(data.intervalos, 0, sizeof(data.intervalos));
 
     leituraVariaveis(data);
     if(leituraOperacoes(data)){
