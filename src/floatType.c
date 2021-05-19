@@ -37,16 +37,16 @@ Float_t calculaEpsilonRelativo( Float_t num )
 }
 
 
-int AlmostEqualRelative(Float_t A, Float_t B)
+int AlmostEqualRelative(double A, double B)
 {
     // Calculate the difference.
-    Float_t diff, largest, relEpsilon;
-    diff.f = fabs(A.f - B.f);
-    A.f = fabs(A.f);
-    B.f = fabs(B.f);
+    double diff, largest, relEpsilon;
+    diff = fabs(A - B);
+    A = fabs(A);
+    B = fabs(B);
     // Find the largest
-    largest.f = (B.f > A.f) ? B.f : A.f;
-    relEpsilon.f = largest.f * FLT_EPSILON;
+    largest = (B > A) ? B : A;
+    relEpsilon = largest * FLT_EPSILON;
 
     printf("\tThe difference: ");
     printFloat_t(diff);
@@ -54,7 +54,7 @@ int AlmostEqualRelative(Float_t A, Float_t B)
     printf("\trel. Epsilon:   ");
     printFloat_t(relEpsilon);
     
-    if (diff.f <= relEpsilon.f)
+    if (diff <= relEpsilon)
         return 1;
     return 0;
 }
@@ -62,14 +62,6 @@ int AlmostEqualRelative(Float_t A, Float_t B)
 
 int AlmostEqualUlps(Float_t A, Float_t B, int maxULPs)
 {
-    // Different signs means they do not match.
-    if (A.parts.sign != B.parts.sign)
-    {
-        // Check for equality to make sure +0==-0
-        if (A.f == B.f)
-            return 1;
-        return 0;
-    }
  
     // Find the difference in ULPs.
     int ulpsDiff = abs(A.i - B.i);

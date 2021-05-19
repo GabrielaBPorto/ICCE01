@@ -3,36 +3,29 @@
 
 #include <stdio.h>
 
-//------------------------------------------------------------------------------
-// (apontador para) estrutura de dados para representar um grafo
-// 
-// o grafo tem um nome, que é uma "string"
-
-typedef struct intervalo {
+typedef struct intervalo_t{
     double inferior;
     double superior;
-    double x;
-    int isUnitario;
-}intervalo;
+    int unitary;
+}intervalo_t;
+
+typedef struct dadosIntervalar_t{
+    intervalo_t *intervalos;
+    int quantidadeVariavel;
+    int quantidadeOperacao;
+}dadosIntervalar_t;
 
 
-double max(int numeroElementos, ...);
-double min(int numeroElementos, ...);
 
-void imprimeIntervalos(intervalo *vetor, int m);
-void imprimeNaoUnitarios(intervalo *vetor, int n, int m);
+void printResults(dadosIntervalar_t dados);
 
-void leituraVariaveis(intervalo *variaveis, int n);
-int leituraOperacoes(intervalo *variaveis,int n, int m);
+void leituraVariaveis(dadosIntervalar_t dados);
+int leituraOperacoes(dadosIntervalar_t dados);
 
-void multiplicacao(intervalo *vetor, int i, int x, int y);
-void divisao(intervalo *vetor, int i, int x, int y);
-void subtracao(intervalo *vetor, int i, int x, int y);
-void soma(intervalo *vetor, int i, int x, int y);
-
-int verificaIntervalos(intervalo intervalo);
-void verificaIntervaloUnitario(intervalo intervalo);
-int AlmostEqualRelative(double A, double B);
+int verificaIntervalos(intervalo_t intervalo);
+void verificaIntervaloUnitario(intervalo_t intervalo);
+int relativoEpsilon(double A, double B);
+int relativoUlps(double valorA, double valorB, int maxULPs);
 
 //------------------------------------------------------------------------------
 #endif
