@@ -55,7 +55,7 @@ double min(int numeroElementos, ...) {
 // int tamanho: tamanho do vetor de intervalos
 void imprimeIntervalos(intervalo *vetor, int tamanho){
     for(int i=0;i<tamanho;i++){
-        printf("x%d - [inf:%.60lf sup:%.60lf]\n", i+1,vetor[i].inferior,vetor[i].superior);
+        printf("x%d - [inf:%.20e sup:%.20e]\n", i+1,vetor[i].inferior,vetor[i].superior);
     }
 
     return;
@@ -69,7 +69,7 @@ void imprimeNaoUnitarios(intervalo *vetor, int quantidadeVariaveis, int quantida
     printf("Intervalos não unitários\n");
     for(int i = quantidadeVariaveis; i < quantidadeVariaveis + quantidadeOperacoes; i++){
         if(!vetor[i].isUnitario){
-            printf("x%d - [inf:%.60lf sup:%.60lf]\n", i+1,vetor[i].inferior,vetor[i].superior);
+            printf("x%d - [inf:%.20e sup:%.20e]\n", i+1,vetor[i].inferior,vetor[i].superior);
         }
     }
 }
@@ -132,10 +132,8 @@ int leituraOperacoes(intervalo *variaveis,int quantidadeOperacoes, int quantidad
     int operadorA, operadorB;
     for(int i=quantidadeVariaveis; i<quantidadeOperacoes+quantidadeVariaveis; i++){
         fgets(lixo,6,stdin);
-        printf("%s",lixo);
         scanf("%c%d %c %c%d\n",&lixoA,&operadorA,&operacao,&lixoB,&operadorB);
-        printf("%c-%d-%c-%c-%d\n",lixoA, operadorA, operacao, lixoB, operadorB);
-        
+
         switch(operacao)
         {
             case '+':

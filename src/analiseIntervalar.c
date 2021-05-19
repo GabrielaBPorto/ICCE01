@@ -16,13 +16,13 @@ int main() {
 
     leituraVariaveis(variaveis,numeroVariaveis);
     if(leituraOperacoes(variaveis,numeroOperacoes,numeroVariaveis)){
-        printf("ERROOO");
+        printf("Erro durante as operações. Printando os intervalos para verificação.\n");
+        imprimeIntervalos(variaveis,numeroVariaveis+numeroOperacoes);
         return -1;
     }
 
     imprimeIntervalos(variaveis,numeroVariaveis+numeroOperacoes);
     imprimeNaoUnitarios(variaveis, numeroVariaveis, numeroOperacoes);
 
-    printf("%d-%d\n", numeroVariaveis,numeroOperacoes);
     return 0;
 }
