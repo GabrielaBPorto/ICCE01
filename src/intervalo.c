@@ -22,8 +22,12 @@ void printResults(dadosIntervalar_t dados){
     return;
 }
 
+void readInput(data){
+    readVariables(data);
+    readOperations(data);
+}
 
-void leituraVariaveis(dadosIntervalar_t dados){
+void readVariables(dadosIntervalar_t dados){
     double value;
     char temp[4];
     for(int i=0; i< dados.quantidadeVariavel; i++){
@@ -35,7 +39,7 @@ void leituraVariaveis(dadosIntervalar_t dados){
 
 
 // Função para realizar o cálculo das operações
-int leituraOperacoes(dadosIntervalar_t dados){
+void readOperations(dadosIntervalar_t dados){
     char temp[6];
     char tempA, tempB;
     char operacao;

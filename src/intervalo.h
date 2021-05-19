@@ -19,8 +19,9 @@ typedef struct dadosIntervalar_t{
 
 void printResults(dadosIntervalar_t dados);
 
-void leituraVariaveis(dadosIntervalar_t dados);
-int leituraOperacoes(dadosIntervalar_t dados);
+void readInput(dadosIntervalar_t dados);
+void readVariables(dadosIntervalar_t dados);
+void readOperations(dadosIntervalar_t dados);
 
 int checkIntervalData(dadosIntervalar_t dados, int posicaoAtual);
 int relativoEpsilon(double A, double B);
