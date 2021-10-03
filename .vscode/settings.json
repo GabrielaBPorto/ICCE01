@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"matheval.h": "c"
+		"matheval.h": "c",
+		"stdio.h": "c"
 	}
 }
