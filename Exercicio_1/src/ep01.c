@@ -50,7 +50,6 @@ int main(){
 	/* Create evaluator for function.  */
 
 	f = evaluator_create(funcao);
-	//printf("%s\n",evaluator_get_string(f));
 	assert (f);
 	
 	/* Create evaluator for function derivative and print textual
@@ -65,12 +64,6 @@ int main(){
 		// 	parada_newton, resultado_secante, parada_secante, erro_absoluto, erro_relativo, ulps);
 		resultado_anterior_newton = resultado_newton;
 	}
-
-	// printf("----TERMINO INPUT----\n");
-
-	// printf("  f'(x) = %s\n", evaluator_get_string (f_prim));
-	// printf ("  f(%g) = %g\n", x0, evaluator_evaluate_x (f, x0));
-	// printf ("  f'(%g) = %g\n", x0, evaluator_evaluate_x (f_prim, x0));
 
 	return 0;
 }
