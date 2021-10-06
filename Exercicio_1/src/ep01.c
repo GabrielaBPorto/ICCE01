@@ -2,7 +2,6 @@
 #include <matheval.h>
 #include <assert.h>
 #include <string.h>
-#include "floatType.h"
 #include <math.h>
 
 #define TAM_BUFFER 100
@@ -11,7 +10,7 @@ double x0;
 double epsilon;
 int maxIter;
 double resultado_anterior_newton, resultado_newton, parada_newton, resultado_anterior_secante,
-resultado_secante, parada_secante, erro_absoluto, erro_relativo, ulps;
+resultado_secante, parada_secante, erro_absoluto, erro_relativo, ulps, resultado_anteanterior_secante;
 int refino_newton = 0, refino_secante = 0;
 
 void *f, *f_prim;
@@ -28,16 +27,50 @@ void leituraVariavel(){
 
 }
 
-int verification_newton(){
-	parada_newton = fabs(resultado_newton - resultado_anterior_newton);
-	return parada_newton < epsilon;
+double verifica(double result1, double result2){
+	return fabs(result1 - result2);
+}
+
+int verification_proximidade_zero(double divisor){
+	if(fabs(divisor) < epsilon){
+		return 1;
+	}
+	return 0;
 }
 
 void metodoNewton(){
-	double divisao = (evaluator_evaluate_x(f,resultado_anterior_newton) / evaluator_evaluate_x(f_prim,resultado_anterior_newton));
-	resultado_newton = resultado_anterior_newton - divisao;
-	if(verification_newton()){
+	double dividendo = (evaluator_evaluate_x(f,resultado_anterior_newton));
+	double divisor = evaluator_evaluate_x(f_prim,resultado_anterior_newton);
+	if(verification_proximidade_zero(divisor)){
 		refino_newton = 1;
+		return;
+	}
+
+	double resultadoDivisao = dividendo / divisor;
+	resultado_newton = resultado_anterior_newton - resultadoDivisao;
+
+	parada_newton = verifica(resultado_newton, resultado_anterior_newton);
+	if(parada_newton < epsilon){
+		refino_newton = 1;
+	}
+}
+
+void metodoSecante(){
+	double dividendo1 = resultado_anteanterior_secante * evaluator_evaluate_x(f,resultado_anterior_secante);
+	double dividendo2 = resultado_anterior_secante * evaluator_evaluate_x(f,resultado_anteanterior_secante);
+	double divisor = evaluator_evaluate_x(f,resultado_anterior_secante) * evaluator_evaluate_x(f,resultado_anteanterior_secante);
+	if(verification_proximidade_zero(divisor)){
+		refino_secante = 1;
+		return;
+	}
+
+	double dividendo = dividendo1 - dividendo2;
+	double resultado = dividendo/divisor;
+	resultado_secante = resultado;
+
+	parada_secante = verifica(resultado_secante, resultado_anterior_secante);
+	if(parada_secante < epsilon){
+		refino_secante = 1;
 	}
 }
 
@@ -45,10 +78,7 @@ int main(){
 
 	leituraVariavel();
 
-	// validar passando o primeiro valor do x0
-	// esta devolvendo alguma coisa que existe
-	/* Create evaluator for function.  */
-
+	// Passos necessários para o uso do Método iterativo Newton
 	f = evaluator_create(funcao);
 	assert (f);
 	
@@ -56,10 +86,18 @@ int main(){
 		representation of derivative.  */
 	f_prim = evaluator_derivative_x (f);
 
-	resultado_anterior_newton = resultado_anterior_secante = x0;
-	for(int i=0; i< maxIter && (!refino_newton); i++){
+	resultado_anterior_newton = resultado_anteanterior_secante = x0;
+	for(int i=1; i<= maxIter && (!refino_newton || !refino_secante); i++){
 		metodoNewton();
-		printf("%d, %1.16e, %1.16e \n", i, resultado_newton, parada_newton);
+		if(i>1){
+			metodoSecante();
+			resultado_anteanterior_secante = resultado_anterior_secante;
+			resultado_anterior_secante = resultado_secante;
+		}
+		else if(i==1){
+			resultado_anterior_secante = resultado_newton;
+		}
+		printf("%d, %1.16e, %1.16e, %1.16e, %1.16e \n", i, resultado_newton, parada_newton, resultado_secante, parada_secante);
 		// printf("%d, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e ", i, resultado_newton,
 		// 	parada_newton, resultado_secante, parada_secante, erro_absoluto, erro_relativo, ulps);
 		resultado_anterior_newton = resultado_newton;
