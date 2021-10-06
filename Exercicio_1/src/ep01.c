@@ -56,16 +56,16 @@ void metodoNewton(){
 }
 
 void metodoSecante(){
-	double dividendo1 = resultado_anteanterior_secante * evaluator_evaluate_x(f,resultado_anterior_secante);
-	double dividendo2 = resultado_anterior_secante * evaluator_evaluate_x(f,resultado_anteanterior_secante);
+	double dividendo1 = resultado_anterior_secante - ( resultado_anterior_secante - resultado_anteanterior_secante);
+	double dividendo2 = evaluator_evaluate_x(f,resultado_anterior_secante);
 	double divisor = evaluator_evaluate_x(f,resultado_anterior_secante) * evaluator_evaluate_x(f,resultado_anteanterior_secante);
 	if(verification_proximidade_zero(divisor)){
 		refino_secante = 1;
 		return;
 	}
 
-	double dividendo = dividendo1 - dividendo2;
-	double resultado = dividendo/divisor;
+	double dividendo = dividendo1 * dividendo2;
+	double resultado = dividendo / divisor;
 	resultado_secante = resultado;
 
 	parada_secante = verifica(resultado_secante, resultado_anterior_secante);
