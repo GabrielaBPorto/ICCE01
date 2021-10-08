@@ -3,18 +3,27 @@
 #include <assert.h>
 #include <string.h>
 #include <math.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <float.h>
+
+int almosteq(double a, double b)
+{
+    return (fabs(a - b) < (DBL_EPSILON * fabs(a + b)));
+}
 
 #define TAM_BUFFER 100
 char funcao[TAM_BUFFER];
 double x0;
 double epsilon;
 int maxIter;
+int ulps;
 // Variaveis usadas para Newton
 double resultado_anterior_newton, resultado_newton, parada_newton;
 // Variaveis usadas para Secante
 double resultado_anteanterior_secante, resultado_anterior_secante, resultado_secante, parada_secante;
 // Variaveis de erro
-double erro_absoluto, erro_relativo, ulps;
+double erro_absoluto, erro_relativo;
 //Variavéis de controle de iteração
 int refino_newton = 0, refino_secante = 0;
 
@@ -88,41 +97,73 @@ void metodoSecante(){
 	}
 }
 
+int ulpsDistance(double a, double b)
+{
+    // Save work if the floats are equal.
+    // Also handles +0 == -0
+    if (a == b) return 0;
+
+    // Max distance for NaN
+    if (isnan(a) || isnan(b)) return INT_MAX;
+
+    // If one's infinite and they're not equal, max distance.
+    if (isinf(a) || isinf(b)) return INT_MAX;
+
+    int ia, ib;
+    memcpy(&ia, &a, sizeof(float));
+    memcpy(&ib, &b, sizeof(float));
+
+    // Don't compare differently-signed floats.
+    if ((ia < 0) != (ib < 0)) return INT_MAX;
+
+    // Return the absolute value of the distance in ULPs.
+    int distance = ia - ib;
+    if (distance < 0) distance = -distance;
+    return distance;
+}
+
+
 int main(){
 
 	leituraVariavel();
 
 	// Printando iteração 0 com os valores iniciais dados pela leitura de variáveis
 	printf("%d, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e \n", 
-		0, x0, x0, x0, x0, 0, 0, 0);
+		0, x0, x0, x0, x0, 0.0, 0.0, 0.0);
 
 
-	// Passos necessários para o uso do Método iterativo Newton
+	// Utilização da biblioteca para tratamento da função e trazer sua derivada
 	f = evaluator_create(funcao);
 	assert (f);
-	
-	/* Create evaluator for function derivative and print textual
-		representation of derivative.  */
 	f_prim = evaluator_derivative_x (f);
 
 	//Inicialização de variavéis
 	resultado_anterior_newton = resultado_anteanterior_secante = x0;
 	for(int i=1; i<= maxIter && (!refino_newton || !refino_secante); i++){
 		metodoNewton();
+		printf("%d, %1.16e, %1.16e,", i, resultado_newton, parada_newton);
+		ulps = almosteq(resultado_newton, resultado_secante);
 		if(i>1){
 			metodoSecante();
 			resultado_anteanterior_secante = resultado_anterior_secante;
 			resultado_anterior_secante = resultado_secante;
+			erro_absoluto = resultado_newton - resultado_secante;
+			
+			if(!verification_proximidade_zero(resultado_secante))
+				erro_relativo = fabs(erro_absoluto) / fabs(resultado_newton);
+
+			
+
+			// Imprimindo resultados finais do estilo de csv.
+			printf(" %1.16e, %1.16e,", resultado_secante, parada_secante);
 		}
 		else if(i==1){
 			// Inicialização de variavel
 			resultado_anterior_secante = resultado_newton;
+			printf(" %1.16e, %1.16e, ", resultado_newton, parada_newton);
 		}
 
-		// Imprimindo resultados finais do estilo de csv.
-		printf("%d, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e \n", 
-		i, resultado_newton, parada_newton, resultado_secante, parada_secante, erro_absoluto, erro_relativo, ulps);
-
+		printf("%1.16e, %1.16e, %d \n", erro_absoluto, erro_relativo, ulps);
 		resultado_anterior_newton = resultado_newton;
 	}
 
