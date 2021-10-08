@@ -6,11 +6,20 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <float.h>
+#include <stdint.h>
 
-int almosteq(double a, double b)
+
+typedef union Double_t
 {
-    return (fabs(a - b) < (DBL_EPSILON * fabs(a + b)));
-}
+    int64_t i;
+    double f;
+    struct
+    {   // Bitfields for exploration.
+        uint64_t mantissa : 53;
+        uint64_t exponent : 11;
+        uint64_t sign : 1;
+    } parts;
+} Double_t;
 
 #define TAM_BUFFER 100
 char funcao[TAM_BUFFER];
@@ -41,6 +50,25 @@ void leituraVariavel(){
 	scanf("%lg", &epsilon);
 	scanf("%d", &maxIter);
 	return;
+}
+
+int ulpsFunction(Double_t A, Double_t B, int maxULPs)
+{
+	//Converte O double para o tipo Double_t
+    
+	//Sinais diferentes não são proximos
+    if (A.parts.sign != B.parts.sign)
+    {
+        // Checa +0==-0
+        if (A.f == B.f)
+            return 1;
+        return 0;
+    }
+ 
+    // Find the difference in ULPs.
+    int ulpsDiff = abs(A.i - B.i);
+    
+    return ulpsDiff;
 }
 
 //Função genérica de verificação de valor
@@ -128,8 +156,8 @@ int main(){
 	leituraVariavel();
 
 	// Printando iteração 0 com os valores iniciais dados pela leitura de variáveis
-	printf("%d, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e \n", 
-		0, x0, x0, x0, x0, 0.0, 0.0, 0.0);
+	printf("%d, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %1.16e, %d \n", 
+		0, x0, x0, x0, x0, 0.0, 0.0, 0);
 
 
 	// Utilização da biblioteca para tratamento da função e trazer sua derivada
@@ -142,7 +170,6 @@ int main(){
 	for(int i=1; i<= maxIter && (!refino_newton || !refino_secante); i++){
 		metodoNewton();
 		printf("%d, %1.16e, %1.16e,", i, resultado_newton, parada_newton);
-		ulps = almosteq(resultado_newton, resultado_secante);
 		if(i>1){
 			metodoSecante();
 			resultado_anteanterior_secante = resultado_anterior_secante;
@@ -152,6 +179,10 @@ int main(){
 			if(!verification_proximidade_zero(resultado_secante))
 				erro_relativo = fabs(erro_absoluto) / fabs(resultado_newton);
 
+			Double_t double_newton, double_secante;
+			double_secante.f = resultado_secante;
+			double_newton.f = resultado_newton;
+			ulps = ulpsFunction(double_newton, double_secante, 100);
 			
 
 			// Imprimindo resultados finais do estilo de csv.
@@ -162,7 +193,7 @@ int main(){
 			resultado_anterior_secante = resultado_newton;
 			printf(" %1.16e, %1.16e, ", resultado_newton, parada_newton);
 		}
-
+ 
 		printf("%1.16e, %1.16e, %d \n", erro_absoluto, erro_relativo, ulps);
 		resultado_anterior_newton = resultado_newton;
 	}
