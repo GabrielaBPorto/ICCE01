@@ -1,6 +1,3 @@
-Cesar Augusto Alves Camillo - GRR 20160169
-Gabriela Bairros Porto - GRR 20167286
-
 Enunciado
 Em diversas aplicações, como na resolução de equações diferenciais ou de sistemas não-lineares, um Sistema Linear (SL) é gerado a partir de um conjunto de funções. Em muitos casos o SL gerado é k-diagonal, permitindo a implementação de métodos mais eficientes. Independentemente da aplicação, podemos implementar um método genérico que gera tal SL a partir dos dados de entrada e o resolve de forma eficiente.
 
