@@ -52,21 +52,25 @@ void leituraVariavel(){
 	return;
 }
 
-int ulpsFunction(Double_t A, Double_t B, int maxULPs)
+int ulpsFunction(double A, double B)
 {
 	//Converte O double para o tipo Double_t
-    
+    Double_t double_newton, double_secante;
+	double_secante.f = A;
+	double_newton.f = B;
+	int ulpsDiff;
+
 	//Sinais diferentes não são proximos
-    if (A.parts.sign != B.parts.sign)
+    if (double_secante.parts.sign != double_newton.parts.sign)
     {
         // Checa +0==-0
-        if (A.f == B.f)
-            return 1;
-        return 0;
+        ulpsDiff = abs(abs(double_secante.i) - abs(double_newton.i));
     }
- 
-    // Find the difference in ULPs.
-    int ulpsDiff = abs(A.i - B.i);
+	else
+	{
+    	ulpsDiff = abs(double_secante.i - double_newton.i);
+	}
+    //Pega a diferença
     
     return ulpsDiff;
 }
@@ -125,32 +129,6 @@ void metodoSecante(){
 	}
 }
 
-int ulpsDistance(double a, double b)
-{
-    // Save work if the floats are equal.
-    // Also handles +0 == -0
-    if (a == b) return 0;
-
-    // Max distance for NaN
-    if (isnan(a) || isnan(b)) return INT_MAX;
-
-    // If one's infinite and they're not equal, max distance.
-    if (isinf(a) || isinf(b)) return INT_MAX;
-
-    int ia, ib;
-    memcpy(&ia, &a, sizeof(float));
-    memcpy(&ib, &b, sizeof(float));
-
-    // Don't compare differently-signed floats.
-    if ((ia < 0) != (ib < 0)) return INT_MAX;
-
-    // Return the absolute value of the distance in ULPs.
-    int distance = ia - ib;
-    if (distance < 0) distance = -distance;
-    return distance;
-}
-
-
 int main(){
 
 	leituraVariavel();
@@ -179,14 +157,10 @@ int main(){
 			if(!verification_proximidade_zero(resultado_secante))
 				erro_relativo = fabs(erro_absoluto) / fabs(resultado_newton);
 
-			Double_t double_newton, double_secante;
-			double_secante.f = resultado_secante;
-			double_newton.f = resultado_newton;
-			ulps = ulpsFunction(double_newton, double_secante, 100);
-			
+			ulps = ulpsFunction(resultado_newton, resultado_secante);
 
 			// Imprimindo resultados finais do estilo de csv.
-			printf(" %1.16e, %1.16e,", resultado_secante, parada_secante);
+			printf(" %1.16e, %1.16e, ", resultado_secante, parada_secante);
 		}
 		else if(i==1){
 			// Inicialização de variavel

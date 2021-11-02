@@ -1,0 +1,12 @@
+Cesar Augusto Alves Camillo - GRR 20160169
+Gabriela Bairros Porto - GRR 20167286
+
+O critério de parada implementado, |Xatual - Xanterior| < epsilon, foi o mesmo escolhido para ambas as funções devido a forma como as mesmas convergem para o resultado
+de forma similar. Além disso, em ambos os métodos, fizemos uma verificação de proximidade com zero em relação ao dividendo devido ao sistema de numeração utilizado a
+
+O código está comentado e com o nome das variáveis bem definidas, e para executá-lo, realizamos os seguintes comandos:
+
+	make clean; make; ./ep01 < 'caminho do arquivo de input'
+
+Para cálculo dos ULPS, nos baseamos em função repassada no semestre passado cujo objetivo era verificar proximidade entre dois valores em ponto flutuante
+para verificar proximidade entre ambos.
