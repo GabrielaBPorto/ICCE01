@@ -48,8 +48,8 @@ void leituraVariavel(){
 	for(int i=0; i<n; i++){
 		fgets(temp, TAM_BUFFER, stdin);
 		length = strlen (temp);
-		if (length > 0 && temp[length - 1] == '\0')
-			temp[length - 1] = '\n';
+		if (length > 0 && temp[length - 1] == '\n')
+			temp[length - 1] = '\0';
 		memcpy(sistema[i], temp, length);
 	}
 	scanf("%lg %d", &epsilon, &maxIter);
@@ -93,17 +93,54 @@ int verification_proximidade_zero(double divisor){
 	return 0;
 }
 
-// Seja um SL de ordem 'n'
-void elimiacaoGauss(double *d, double *a, double *c, double *b, double*x, int n){
+
+void eliminacaoGaussSeidel(double *d, double *a, double *c, double *b, double*x, int n){
 	// Triangulização: 5(n-1) operações
 
-	for(int=0; i< n-1; i++){
+	for(int i =0; i< n-1; i++){
 		double m = a[i] / d[i];
 		a[i] = 0.0;
 		d[i+1] -= c[i] * m;
 		b[i+1] -= b[i] * m;
 	}
 	
+}
+
+// A construção da matriz diagonal se dá para
+// A diagonal principal
+// As diagonais superiores a partir da banda passada de parametro input
+// As diagonais inferior a partir da banda passada de parametro input
+// O tamanho da diagonal dentro da matriz
+// A quantidade de diagonais a partir do parametro de input
+// 
+void construcaoMatrizKDiagonal(double *diagonalPrincipal, double **superior, double **inferior, int n, int k) {
+	int band = (k-1)/2;
+	
+	for(int i=0; i< n ; i++){
+		diagonalPrincipal[i] = executa_funcao(sistema[band], i);
+		for(int x=0; x<band; x++){
+			if(band-x+1 > 0)
+				superior[x][i] = executa_funcao(sistema[(band-(x+1))], i);
+			if(band+x+1 > n)
+				inferior[x][i] = executa_funcao(sistema[(band+(x+1))], i);
+		}
+	}
+	
+}
+
+// Função para gerar o vetor de coeficientes independentes
+double* gerarMatrizIndependente(char *funcao, int n)
+{
+	double *independentes = calloc(n, sizeof(double));
+	void *eval = evaluator_create(funcao);
+	assert(eval);
+
+	for (int i = 0; i < n; i++)
+	{
+		independentes[i] = evaluator_evaluate_x(eval, i);
+	}
+
+	return independentes;
 }
 
 int main(){
@@ -116,7 +153,7 @@ int main(){
 	//Impressão da entrade DEBUG
 	printf("O valor de n : %d o valor de k %d \n", n, k);
 	for(int i=0; i<n; i++){
-		printf("A função %d is %s", i, sistema[i]);
+		printf("A função %d is %s\n", i, sistema[i]);
 	}
 	printf("O valor de epsilon : %1.16e o valor de maxit %d \n", epsilon, maxIter);
 
@@ -127,6 +164,18 @@ int main(){
 	// Metodo a utilizar para a solução de um SL k-diagonal
 	// Gauss-Seidel
 
+	double diagonalPrincipal[n];
+
+	double superior[(k-1)/2][n];
+	double inferior[(k-1)/2][n];
+	//construcaoMatrizKDiagonal(diagonalPrincipal, superior, inferior, n, k);
+	//eliminacaoGaussSeidel(diagonalPrincipal, superior, inferior, n, k, solution, variaveis);
+	double *independentes = gerarMatrizIndependente(sistema[n-1],n);
+
+	for (int i = 0; i<n; i++)
+	{
+		printf("Coeficiente %d : %lg\n", i, independentes[i]);
+	}
 
 	// Impressão da solução
 	// for(int i=0; i< n; i++){
