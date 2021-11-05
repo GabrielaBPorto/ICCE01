@@ -33,7 +33,6 @@ função : string da expressão da função fi(x)
 epsilon : tolerancia no metodo de Gauss-Seidel
 MAXIT : número máximo de iterações
 
-
 Entrega
  
 Este exercício deve ser elaborado em equipes de até 2 alunos. Apenas um dos alunos da equipe deve efetuar a entrega dos arquivos. Devem ser entregues os códigos-fonte do programa (em linguagem C), makefile, arquivos de teste usados pela equipe e um arquivo LEIAME.txt contendo as seguintes informações:
@@ -41,3 +40,6 @@ Este exercício deve ser elaborado em equipes de até 2 alunos. Apenas um dos al
 Nomes, GRR e login DInf dos alunos da equipe;
 Demais informações relevantes sobre o código e execução.
 Todos estes itens devem ser compactados em um arquivo do tipo .tar , .tgz ou .zip.
+
+Nesse trabalho as táticas de melhora de perfomance resumem-se a:
+- Utilizar uma matriz como um vetor, e fazer acesso

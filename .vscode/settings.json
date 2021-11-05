@@ -46,6 +46,7 @@
 		"sstream": "c",
 		"stdexcept": "c",
 		"streambuf": "c",
-		"typeinfo": "c"
+		"typeinfo": "c",
+		"math.h": "c"
 	}
 }
