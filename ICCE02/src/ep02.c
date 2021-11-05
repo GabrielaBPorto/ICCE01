@@ -23,36 +23,22 @@ typedef union Double_t
 
 #define TAM_BUFFER 100
 char sistema[TAM_BUFFER][TAM_BUFFER];
-double x0;
-double epsilon;
-int n, k, maxIter;
-// Variaveis usadas para Newton
-double resultado_anterior_newton, resultado_newton, parada_newton;
-// Variaveis usadas para Secante
-double resultado_anteanterior_secante, resultado_anterior_secante, resultado_secante, parada_secante;
-// Variaveis de erro
-double erro_absoluto, erro_relativo;
-//Variavéis de controle de iteração
-int refino_newton = 0, refino_secante = 0;
-
-//Variaveis para uso de biblioteca de tratamento de funções
-void *f, *f_prim;
 
 // Essa função tem como o objetivo de centralizar a leitura das variavéis globais
-void leituraVariavel(){
+void leituraVariavel(int *n, int *k, double *epsilon, int *maxIter){
 	
 	char temp[TAM_BUFFER];
 	int length;
 
-	scanf("%d %d\n", &n, &k);
-	for(int i=0; i<n; i++){
+	scanf("%d %d\n", n, k);
+	for(int i=0; i<*n; i++){
 		fgets(temp, TAM_BUFFER, stdin);
 		length = strlen (temp);
 		if (length > 0 && temp[length - 1] == '\n')
 			temp[length - 1] = '\0';
 		memcpy(sistema[i], temp, length);
 	}
-	scanf("%lg %d", &epsilon, &maxIter);
+	scanf("%lg %d", epsilon, maxIter);
 
 	return;
 }
@@ -80,19 +66,6 @@ int ulpsFunction(double A, double B)
     return ulpsDiff;
 }
 
-//Função genérica de verificação de valor
-double verifica(double result1, double result2){
-	return fabs(result1 - result2);
-}
-
-//Função de verificação de proximo de zero usando epsilon
-int verification_proximidade_zero(double divisor){
-	if(fabs(divisor) < epsilon){
-		return 1;
-	}
-	return 0;
-}
-
 
 void eliminacaoGaussSeidel(double *d, double *a, double *c, double *b, double*x, int n){
 	// Triangulização: 5(n-1) operações
@@ -113,19 +86,28 @@ void eliminacaoGaussSeidel(double *d, double *a, double *c, double *b, double*x,
 // O tamanho da diagonal dentro da matriz
 // A quantidade de diagonais a partir do parametro de input
 // 
-void construcaoMatrizKDiagonal(double *diagonalPrincipal, double **superior, double **inferior, int n, int k) {
-	int band = (k-1)/2;
+double *construcaoMatrizKDiagonal(int n, int k) {
 	
-	for(int i=0; i< n ; i++){
-		diagonalPrincipal[i] = executa_funcao(sistema[band], i);
-		for(int x=0; x<band; x++){
-			if(band-x+1 > 0)
-				superior[x][i] = executa_funcao(sistema[(band-(x+1))], i);
-			if(band+x+1 > n)
-				inferior[x][i] = executa_funcao(sistema[(band+(x+1))], i);
+	int band = (k-1)/2;
+	double *matrizKDiagonal = calloc(n*n, sizeof(double));
+	
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (i > (j+band) || i < (j-band))
+			{
+				matrizKDiagonal[(i*n)+j] = 0;
+			}
+			else
+			{
+				void *eval = evaluator_create(sistema[band+i-j]);
+				matrizKDiagonal[(i*n)+j] = evaluator_evaluate_x(eval, i);
+			}
 		}
 	}
-	
+
+	return matrizKDiagonal;
 }
 
 // Função para gerar o vetor de coeficientes independentes
@@ -145,7 +127,10 @@ double* gerarMatrizIndependente(char *funcao, int n)
 
 int main(){
 
-	leituraVariavel();
+	double epsilon;
+	int n, k, maxIter;
+
+	leituraVariavel(&n, &k, &epsilon, &maxIter);
 
 	int solution[n][n];
 	int variaveis[k];
@@ -164,18 +149,25 @@ int main(){
 	// Metodo a utilizar para a solução de um SL k-diagonal
 	// Gauss-Seidel
 
-	double diagonalPrincipal[n];
+	double *matrizKDiagonal = construcaoMatrizKDiagonal(n, k);
 
-	double superior[(k-1)/2][n];
-	double inferior[(k-1)/2][n];
-	//construcaoMatrizKDiagonal(diagonalPrincipal, superior, inferior, n, k);
 	//eliminacaoGaussSeidel(diagonalPrincipal, superior, inferior, n, k, solution, variaveis);
-	double *independentes = gerarMatrizIndependente(sistema[n-1],n);
+	// double *independentes = gerarMatrizIndependente(sistema[n-1],n);
 
-	for (int i = 0; i<n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		printf("Coeficiente %d : %lg\n", i, independentes[i]);
+		for (int j = 0; j < n; j++)
+		{
+			printf("[%lg] ", matrizKDiagonal[i*n+j]);
+		}
+		printf("\n");
 	}
+
+
+	// for (int i = 0; i<n; i++)
+	// {
+	// 	printf("Coeficiente %d : %lg\n", i, independentes[i]);
+	// }
 
 	// Impressão da solução
 	// for(int i=0; i< n; i++){
