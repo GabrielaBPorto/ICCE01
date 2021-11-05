@@ -67,17 +67,25 @@ int ulpsFunction(double A, double B)
 }
 
 
-void eliminacaoGaussSeidel(double *d, double *a, double *c, double *b, double*x, int n){
-	// Triangulização: 5(n-1) operações
+// void eliminacaoGaussSeidel(double *b, double*x, int n, double tol){
 
-	for(int i =0; i< n-1; i++){
-		double m = a[i] / d[i];
-		a[i] = 0.0;
-		d[i+1] -= c[i] * m;
-		b[i+1] -= b[i] * m;
-	}
+// 	// double resultado_anterior[]
+// 	// double erro = 1.0 + tol;
+// 	// while ( erro < tol ){
+// 	// 	x[0] = (b[0] - c[0] * x[1]) / d[0];
+// 	// 	for(int i=1;i<n-1;++i){
+// 	// 		x[i] = (b[i] -a[i-1] * x[i-q] - c[i] * x[i+1])/d[i];
+// 	// 	}
+// 	// 	x[n-1] = (b[n-1] - a[n-2] * x[n-2]) / d[n-1];
+// 	// 	//Calcula erro
+// 	// 	double erroAcumulativo = 0.0;
+// 	// 	for(int i=0;i<n;i++){
+// 	// 		erroAcumulativo = x[i]
+// 	// 	}
+// 	// 	// Pegar vetor de resultado e diminuir do vetor de resultado passado
+// 	// }
 	
-}
+// }
 
 // A construção da matriz diagonal se dá para
 // A diagonal principal
@@ -89,6 +97,7 @@ void eliminacaoGaussSeidel(double *d, double *a, double *c, double *b, double*x,
 double *construcaoMatrizKDiagonal(int n, int k) {
 	
 	int band = (k-1)/2;
+	int *contadorDiagonal = calloc(k, sizeof(int));
 	double *matrizKDiagonal = calloc(n*n, sizeof(double));
 	
 	for (int i = 0; i < n; i++)
@@ -101,8 +110,10 @@ double *construcaoMatrizKDiagonal(int n, int k) {
 			}
 			else
 			{
-				void *eval = evaluator_create(sistema[band+i-j]);
-				matrizKDiagonal[(i*n)+j] = evaluator_evaluate_x(eval, i);
+				int diag = band+i-j;
+				void *eval = evaluator_create(sistema[diag]);				
+				matrizKDiagonal[(i*n)+j] = evaluator_evaluate_x(eval, contadorDiagonal[diag]);
+				contadorDiagonal[diag]+=1;
 			}
 		}
 	}
@@ -132,8 +143,8 @@ int main(){
 
 	leituraVariavel(&n, &k, &epsilon, &maxIter);
 
-	int solution[n][n];
-	int variaveis[k];
+	double solution[n][n];
+	double variaveis[k];
 
 	//Impressão da entrade DEBUG
 	printf("O valor de n : %d o valor de k %d \n", n, k);
@@ -151,8 +162,8 @@ int main(){
 
 	double *matrizKDiagonal = construcaoMatrizKDiagonal(n, k);
 
-	//eliminacaoGaussSeidel(diagonalPrincipal, superior, inferior, n, k, solution, variaveis);
-	// double *independentes = gerarMatrizIndependente(sistema[n-1],n);
+	//eliminacaoGaussSeidel(solution, variaveis, n, k);
+	double *independentes = gerarMatrizIndependente(sistema[n-1],n);
 
 	for (int i = 0; i < n; i++)
 	{
