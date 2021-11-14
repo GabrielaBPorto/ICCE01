@@ -7,29 +7,16 @@
 
 int main(int argc, char *argv[]){
 
-	FILE *output, *input;
-
 	// Declaração de variavel
 	double epsilon, *resultados, *jacobiana, *resultadoJacobiana, helper, maxJacobiana, maxEval;
 	int dim, maxIter, length, end, iter;
 	char equacoes[TAM_BUFFER][TAM_BUFFER], temp[TAM_BUFFER], **variaveis;
 	void *eval, **derivadas;
 
-	input = stdin;
-	// fopen("../input/sistemas.dat","r+");
-
 	output = trataSaida(argc, argv);
+	input = fopen("../input/sistemas.dat","r+");
 
-	//Tratamento de entrada
-	if (fscanf(input, "%d\n", &dim) == EOF)
-	{
-		printf("Erro: Arquivo vazio.\n");
-		return -1;
-	}
-	
-
-
-	while (!end)
+	while (fscanf(input, "%d\n", &dim) != EOF)
 	{
 		fprintf(output,"%d\n", dim);
 
@@ -45,7 +32,7 @@ int main(int argc, char *argv[]){
 
 		for (int i = 0; i < dim; i++)
 		{
-			fgets(temp, TAM_BUFFER, stdin);
+			fgets(temp, TAM_BUFFER, input);
 			length = strlen (temp);
 			if (length > 0 && temp[length - 1] == '\n')
 				temp[length - 1] = '\0';

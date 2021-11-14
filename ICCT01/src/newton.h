@@ -6,6 +6,8 @@
 #include <sys/time.h>
 
 #define TAM_BUFFER 256
+FILE *output, *input;
+
 
 void leituraVariavel(FILE *input, int *n, int *k, double *epsilon, int *maxIter);
 FILE* trataSaida(int argc, char *argv[]);

@@ -12,22 +12,29 @@
 
 char sistema[TAM_BUFFER][TAM_BUFFER];
 
+// Função de tratamento de saida -o
+// Objetivo: Verificar se o usuário está fazendo chamada para saida diferente de stdout, e retornando ponteiro para leitura
+// Variaveis:
+// 			argc: Quantidade de elementos que existem na chamada da execução de arquivo
+//			argc: Os elementos que existem na chamada de execução de arquivo
+// Retorna o ponteiro de arquivo de saída correto para impressão.
 FILE* trataSaida(int argc, char *argv[]){
 	char outputName[TAM_BUFFER];
 	FILE *output;
+
 	for(int i=0;i<argc;i++){
-		if(strcmp(argv[i],"-o")){
+		if(strcmp(argv[i],"-o") == 0){
 			if(i+1<argc){
 				strcpy(outputName, argv[i+1]);
 			}
 		}
 	}
-	fprintf(stdout,"%s\n",outputName);
-	if(outputName){
+
+	// Caso tiver um nome aponta para a saida, se não saida padrão
+	if(strlen(outputName) > 0){
 		output = fopen(outputName, "w+");
 	}
-
-	if(output == NULL && outputName == NULL){
+	else{
 		output = stdout;
 	}
 
