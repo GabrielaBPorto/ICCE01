@@ -52,7 +52,7 @@ int main(){
 			for (int j = 0; j < dim; j++)
 			{
 				char variavel[5];
-				sprintf(variavel, "x%d", j);
+				sprintf(variavel, "x%d", j+1);
 				derivadas[(i*dim)+j] = evaluator_derivative(eval, variavel);
 				assert(derivadas[(i*dim)+j]);
 			}
