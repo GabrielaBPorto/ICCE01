@@ -130,14 +130,12 @@ void liberacaoMemoriaUsada(int n){
 	
 }
 
-// 
-// Objetivo: 
+// Metodo de jacobi
+// Objetivo: Criar matriz jacobiana para a resposta atual
 // Variaveis:
 // 			n: Tamanho do vetor
 // Retorna o tempo de cálculo utilizando o método de newton
-//Criar matriz jacobiana para a resposta atual, necessário computar o tempo
-//Para criar a matriz jacobiana, só aplicar jacobiana[(i*n)+j] = 	evaluator_evaluate(derivadas[(i*n)+j], resultados[j])
-//exemplo: https://moodle.c3sl.ufpr.br/pluginfile.php/140644/mod_resource/content/16/Resolu%C3%A7%C3%A3o%20de%20Sistemas%20N%C3%A3o-Lineares.pdf slide 38
+// exemplo: https://moodle.c3sl.ufpr.br/pluginfile.php/140644/mod_resource/content/16/Resolu%C3%A7%C3%A3o%20de%20Sistemas%20N%C3%A3o-Lineares.pdf slide 38
 double jacobianaMetodo(int n){
 	double tempoExec = timestamp();
 
@@ -152,11 +150,12 @@ double jacobianaMetodo(int n){
 	return timestamp() - tempoExec;
 }
 
-// 
-// Objetivo: 
+// Pivoteamento parcial de Gauss
+// Objetivo: Aplicar Gauss com Pivoteamento Parcial para refinar a resposta
 // Variaveis:
 // 			n: Tamanho do vetor
 // Retorna o tempo de cálculo utilizando o método de newton
+// Exemplo: https://www.bragitoff.com/2018/02/gauss-elimination-c-program/
 double gaussPivotearParcial(int n){
 	double tempoExec = timestamp();
 
@@ -194,26 +193,24 @@ double gaussPivotearParcial(int n){
 	return timestamp() - tempoExec;
 }
 
-// 
-// Objetivo: 
+// Método de Newton
+// Objetivo: Devolver uma solução refinada para o Sistema linear passado
 // Variaveis:
 // 			n: Tamanho do vetor
+//			tempos: Vetor que grava tempos por iteração de resposta
 // Retorna o tempo de cálculo utilizando o método de newton
 double newtonMethod(int n, double *tempos){
 	double tempoExec = timestamp();
 	int iter;
-	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
 
-	for (iter = 0; iter < maxIter; iter++) //Adicionar os epsilons na verificação ali
+	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
+	for (iter = maxIter-1; iter < maxIter; iter++) //Adicionar os epsilons na verificação ali
 	{
 		//Verificação do resultado para verificar se esta proximo o suficiente da raiz ?
 		impressaoResultados(n);
 
 		tempos[2] = jacobianaMetodo(n);
-
-		//Aplicar Gauss com Pivoteamento Parcial para refinar a resposta
-		//Exemplo: https://www.bragitoff.com/2018/02/gauss-elimination-c-program/
-		
+	
 		tempos[3] = gaussPivotearParcial(n);
 
 		//Calcular novo resultado (resultados[i] += resultadoJacobiana[i])
@@ -227,11 +224,11 @@ double newtonMethod(int n, double *tempos){
 }
 
 
-// 
-// Objetivo: 
+// Impressão do vetor de resultados
+// Objetivo: Impressão padronizada para os resultados de cada iteração
 // Variaveis:
 // 			n: Tamanho do vetor
-// Retorna o tempo de cálculo utilizando o método de newton
+// Não retorna nada
 void impressaoResultados(int  n){
 	for (int i = 0; i < n; i++)
 	{
