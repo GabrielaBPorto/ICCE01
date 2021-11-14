@@ -10,11 +10,10 @@
 
 // Declaração de variaveis globais.
 FILE *output, *input;
-double *resultados, *jacobiana, *resultadoJacobiana, helper, maxJacobiana, maxEval;
+double *resultados, *jacobiana, *resultadoJacobiana, helper, maxJacobiana, maxEval, epsilon;
 char equacoes[TAM_BUFFER][TAM_BUFFER], temp[TAM_BUFFER], **variaveis;
 void **derivadas, *eval;
-double epsilon;
-int maxIter, end, iter;
+int maxIter;
 
 // Funções 
 FILE* trataSaida(int argc, char *argv[]);
@@ -23,7 +22,10 @@ void leituraEquacoes(int n);
 void leituraVariaveis(int n);
 double escreveDerivadasParciais(int n);
 void liberacaoMemoriaUsada(int n);
-void jacobiano(int n);
+double newtonMethod(int n, double *tempos);
+double jacobianaMetodo(int n);
+void impressaoResultados(int  n);
+double gaussPivotearParcial(int n);
 
 
 #endif // __NEWTON_H__

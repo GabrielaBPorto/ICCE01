@@ -127,46 +127,116 @@ double escreveDerivadasParciais (int n){
 // 			n: Tamanho do vetor
 // Não retorna nada
 void liberacaoMemoriaUsada(int n){
-	free(derivadas);
-	free(jacobiana);
-	free(resultados);
-	free(resultadoJacobiana);
-	for (int i = 0; i < n; i++)
-	{
-		free(variaveis[i]);
-	}
-	free(variaveis);
+	
 }
 
 // 
 // Objetivo: 
 // Variaveis:
 // 			n: Tamanho do vetor
-// 
-void jacobiano(int n){
-	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
-	//exemplo: https://moodle.c3sl.ufpr.br/pluginfile.php/140644/mod_resource/content/16/Resolu%C3%A7%C3%A3o%20de%20Sistemas%20N%C3%A3o-Lineares.pdf slide 38
-	for (iter = maxIter-1; iter < maxIter; iter++) //Adicionar os epsilons na verificação ali
-	{
-		for (int i = 0; i < n; i++)
+// Retorna o tempo de cálculo utilizando o método de newton
+//Criar matriz jacobiana para a resposta atual, necessário computar o tempo
+//Para criar a matriz jacobiana, só aplicar jacobiana[(i*n)+j] = 	evaluator_evaluate(derivadas[(i*n)+j], resultados[j])
+//exemplo: https://moodle.c3sl.ufpr.br/pluginfile.php/140644/mod_resource/content/16/Resolu%C3%A7%C3%A3o%20de%20Sistemas%20N%C3%A3o-Lineares.pdf slide 38
+double jacobianaMetodo(int n){
+	double tempoExec = timestamp();
+
+	for (int i = 0; i < n; i++)
+	{	
+		for (int j = 0; j < n; j++)
 		{
-			fprintf(output, "x%d = %.6lf\n", i+1, resultados[i]);
+			jacobiana[(i*n)+j] = evaluator_evaluate(derivadas[(i*n)+j], n, (char **)variaveis, resultados);
 		}
-		//Criar matriz jacobiana para a resposta atual, necessário computar o tempo
-		//Para criar a matriz jacobiana, só aplicar jacobiana[(i*n)+j] = evaluator_evaluate(derivadas[(i*n)+j], resultados[j])
-		for (int i = 0; i < n; i++)
-		{	
-			for (int j = 0; j < n; j++)
-			{
-				jacobiana[(i*n)+j] = evaluator_evaluate(derivadas[(i*n)+j], n, (char **)variaveis, resultados);
-			}
 
-		}		
+	}
+	return timestamp() - tempoExec;
+}
 
-		//Aplicar Gauss com Pivoteamento Parcial para refinar a resposta, necessário computar o tempo
+// 
+// Objetivo: 
+// Variaveis:
+// 			n: Tamanho do vetor
+// Retorna o tempo de cálculo utilizando o método de newton
+double gaussPivotearParcial(int n){
+	double tempoExec = timestamp();
+
+	int i,j,k;
+    for(i=0;i<n;i++){
+        // Pivoteamento parcial
+        for(k=i+1;k<n;k++){
+			// Caso o elemento da diagonal for menor que os termos abaixo
+            if(fabs(jacobiana[(i*n)+i])<fabs(jacobiana[(k*n)+i])){
+                //Troca as linhas
+                for(j=0;j<n;j++){                
+                    double temp;
+                    temp = jacobiana[(i*n)+j];
+                    jacobiana[(i*n)+j] = jacobiana[(k*n)+j];
+                    jacobiana[(k*n)+j] = temp;
+                }
+            }
+        }
+        //Realiza eliminação de gauss
+        for(k=i+1;k<n;k++){
+            double term=jacobiana[(k*n)+i]/ jacobiana[(i*n)+i];
+            for(j=0;j<n;j++){
+                resultadoJacobiana[(k*n)+j]=jacobiana[(k*n)+j]-term*jacobiana[(i*n)+j];
+            }
+        }
+    }
+
+	// for(int i = 0; i < n; i++){
+	// 	fprintf(stdout,"%d--=\n",i);
+	// 	for(int k = 0; k <n; k++){
+	// 		fprintf(stdout,"[%d][%d] = %.6f\n", i, k, resultadoJacobiana[(i*n)+k]);
+	// 	}
+	// }
+
+	return timestamp() - tempoExec;
+}
+
+// 
+// Objetivo: 
+// Variaveis:
+// 			n: Tamanho do vetor
+// Retorna o tempo de cálculo utilizando o método de newton
+double newtonMethod(int n, double *tempos){
+	double tempoExec = timestamp();
+	int iter;
+	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
+
+	for (iter = 0; iter < maxIter; iter++) //Adicionar os epsilons na verificação ali
+	{
+		//Verificação do resultado para verificar se esta proximo o suficiente da raiz ?
+		impressaoResultados(n);
+
+		tempos[2] = jacobianaMetodo(n);
+
+		//Aplicar Gauss com Pivoteamento Parcial para refinar a resposta
 		//Exemplo: https://www.bragitoff.com/2018/02/gauss-elimination-c-program/
+		
+		tempos[3] = gaussPivotearParcial(n);
 
 		//Calcular novo resultado (resultados[i] += resultadoJacobiana[i])
 		//Encontrar maior F(X) e maior resultadoJacobiana
+		for(int i=0; i< n; i++){
+			resultados[i] += resultadoJacobiana[i];
+		}
+		
 	}
+	return timestamp() - tempoExec;
+}
+
+
+// 
+// Objetivo: 
+// Variaveis:
+// 			n: Tamanho do vetor
+// Retorna o tempo de cálculo utilizando o método de newton
+void impressaoResultados(int  n){
+	for (int i = 0; i < n; i++)
+	{
+		fprintf(output, "x%d = %.6lf\n", i+1, resultados[i]);
+	}
+	fprintf(output,"#\n");
+	return;
 }
