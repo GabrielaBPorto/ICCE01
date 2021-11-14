@@ -36,7 +36,7 @@ void printarMatrizKDiagonal(double *matriz, int n, int k)
 	int band = (k-1)/2;
 	for (int i = 0; i < n; i++)
 	{
-		printf("Valores das diagonais linha %d: ", i);
+		printf("Valores das diagonais na linha %d: ", i);
 		for (int j = 0; j < n; j++)
 		{
 			if (i > (j+band) || i < (j-band))

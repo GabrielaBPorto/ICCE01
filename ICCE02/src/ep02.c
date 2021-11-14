@@ -12,13 +12,6 @@ int main(){
 	double solution[n][n];
 	double variaveis[k];
 
-	//Impressão da entrade DEBUG
-	// printf("O valor de n : %d o valor de k %d \n", n, k);
-	// for(int i=0; i<n; i++){
-	// 	printf("A função %d is %s\n", i, sistema[i]);
-	// }
-	// printf("O valor de epsilon : %1.16e o valor de maxit %d \n", epsilon, maxIter);
-
 	double tempoExec = timestamp();
 
 	double *matrizKDiagonal = construcaoMatrizKDiagonal(n, k);
@@ -29,13 +22,13 @@ int main(){
 
 	double *resultado = gaussSeidel(matrizKDiagonal, independentes, epsilon, n, k, maxIter);
 
-	printf("termos independentes: ");
+	printf("Termos Independentes: ");
 	for (int i = 0; i<n; i++)
 	{
-		printf("[%.6lf] ", independentes[i]);
+		printf("%.6lf ", independentes[i]);
 	}
 	printf("\n----\n");
-	printf("solucao: ");
+	printf("Solucao: ");
 	for (int i = 0; i < n; i++)
 	{
 		printf("%.6lf ", resultado[i]);

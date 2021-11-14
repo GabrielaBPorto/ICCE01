@@ -12,7 +12,9 @@
 
 char sistema[TAM_BUFFER][TAM_BUFFER];
 
-// Essa função tem como o objetivo de centralizar a leitura das variavéis globais
+// 
+// Objetivo: Centralizar leitura de variavéis usadas ao longo do algoritmo
+// Parâmetros: N para tam, K 
 void leituraVariavel(int *n, int *k, double *epsilon, int *maxIter){
 	
 	char temp[TAM_BUFFER];

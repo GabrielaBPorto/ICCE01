@@ -1,5 +1,5 @@
-#ifndef __NEWTON_H__
-#define __NEWTON_H__
+#ifndef __INPUT_H__
+#define __INPUT_H__
 
 #include <stdlib.h>
 #include <sys/time.h>
@@ -8,4 +8,4 @@
 
 void leituraVariavel(int *n, int *k, double *epsilon, int *maxIter);
 
-#endif // __NEWTON_H__
+#endif // __INPUT_H__

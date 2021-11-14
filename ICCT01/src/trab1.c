@@ -5,22 +5,33 @@
 #include <matheval.h>
 #include <assert.h>
 
-int main(){
+int main(int argc, char *argv[]){
 
+	FILE *output, *input;
+
+	// Declaração de variavel
 	double epsilon, *resultados, *jacobiana, *resultadoJacobiana, helper, maxJacobiana, maxEval;
 	int dim, maxIter, length, end, iter;
 	char equacoes[TAM_BUFFER][TAM_BUFFER], temp[TAM_BUFFER], **variaveis;
 	void *eval, **derivadas;
 
-	if (scanf("%d\n", &dim) == EOF)
+	input = stdin;
+	// fopen("../input/sistemas.dat","r+");
+
+	output = trataSaida(argc, argv);
+
+	//Tratamento de entrada
+	if (fscanf(input, "%d\n", &dim) == EOF)
 	{
 		printf("Erro: Arquivo vazio.\n");
 		return -1;
 	}
+	
 
-	while (end != 1)
+
+	while (!end)
 	{
-		printf("%d\n", dim);
+		fprintf(output,"%d\n", dim);
 
 		resultados = calloc(dim, sizeof(double));
 		resultadoJacobiana = calloc(dim, sizeof(double));
@@ -43,19 +54,19 @@ int main(){
 
 		for (int i = 0; i < dim; i++)
 		{
-			scanf("%lf", &helper);
+			fscanf(input,"%lf", &helper);
 			resultados[i] = helper;
 		}
 
-		scanf("%lf\n", &epsilon);
-		scanf("%d\n", &maxIter);
+		fscanf(input,"%lf\n", &epsilon);
+		fscanf(input,"%d\n", &maxIter);
 
 		//Criar vetor das derivadas parciais, necessário computar o tempo
 		for (int i = 0; i < dim; i++)
 		{
 			eval = evaluator_create(equacoes[i]);
 			assert(eval);
-			printf("%s = 0\n", evaluator_get_string(eval));
+			fprintf(output, "%s = 0\n", evaluator_get_string(eval));
 			for (int j = 0; j < dim; j++)
 			{
 				char variavel[5];
@@ -70,7 +81,7 @@ int main(){
 			}
 		}
 
-		printf("#\n");
+		fprintf(output,"#\n");
 
 		//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
 		//exemplo: https://moodle.c3sl.ufpr.br/pluginfile.php/140644/mod_resource/content/16/Resolu%C3%A7%C3%A3o%20de%20Sistemas%20N%C3%A3o-Lineares.pdf slide 38
@@ -78,7 +89,7 @@ int main(){
 		{
 			for (int i = 0; i < dim; i++)
 			{
-				printf("x%d = %.6lf\n", i+1, resultados[i]);
+				fprintf(output, "x%d = %.6lf\n", i+1, resultados[i]);
 			}
 			//Criar matriz jacobiana para a resposta atual, necessário computar o tempo
 			//Para criar a matriz jacobiana, só aplicar jacobiana[(i*dim)+j] = evaluator_evaluate(derivadas[(i*dim)+j], resultados[j])
@@ -112,11 +123,11 @@ int main(){
 
 		//Printar os tempos
 
-		if (scanf("%d\n", &dim) == EOF)
+		if (fscanf(input,"%d\n", &dim) == EOF)
 		{
 			end = 1;
 		}
-		printf("\n");
+		fprintf(output, "\n");
 	}
 	
 	
