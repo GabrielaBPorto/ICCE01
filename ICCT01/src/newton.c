@@ -11,7 +11,7 @@
 #include <string.h>
 
 // Função de tratamento de saida -o
-// Objetivo: Verificar se o usuário está fazendo chamada para saida diferente de stdout, e retornando ponteiro para leitura
+// Objetivo: Verificar se o usuário está fazendo / para saida diferente de stdout, e retornando ponteiro para leitura
 // Variaveis:
 // 			argc: Quantidade de elementos que existem na chamada da execução de arquivo
 //			argc: Os elementos que existem na chamada de execução de arquivo
@@ -118,7 +118,6 @@ double escreveDerivadasParciais (int n){
 		}
 	}
 	return timestamp() - tempoExec;
-	printf("Derivadas ok\n");
 }
 
 // Liberação de memória
