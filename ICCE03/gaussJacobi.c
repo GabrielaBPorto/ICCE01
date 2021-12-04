@@ -20,7 +20,7 @@ void gaussJacobi(FILE *f_in, FILE *f_out) {
     A[i] = (double *) malloc(sizeof(double) * n);
   double *b = (double *) malloc(sizeof(double) * n);
   double *x = (double *) malloc(sizeof(double) * n);
-  LIKWID_MARKER_STOP("AllocationStopJacobiNotOpt");
+  LIKWID_MARKER_STOP("AllocationStartJacobiNotOpt");
   // --------------------------------------  leitura: matriz A, vetor b, vetor x
   LIKWID_MARKER_START("ReadingVectorStartJacobiNotOpt");
   for (int i = 0; i < n; ++i)
@@ -30,7 +30,7 @@ void gaussJacobi(FILE *f_in, FILE *f_out) {
     fscanf(f_in, "%lf", &(b[i]));
   for (int i = 0; i < n; ++i)
     fscanf(f_in, "%lf", &(x[i]));
-  LIKWID_MARKER_STOP("ReadingVectorStopJacobiNotOpt");
+  LIKWID_MARKER_STOP("ReadingVectorStartJacobiNotOpt");
   // --------------------------------------------------  Método:
   LIKWID_MARKER_START("MethodStartJacobiNotOpt");
   double *x1 = (double *) malloc(sizeof(double) * n);
@@ -46,7 +46,7 @@ void gaussJacobi(FILE *f_in, FILE *f_out) {
     for (int i = 0; i < n; ++i)
       x[i] = x1[i];
   }
-  LIKWID_MARKER_STOP("MethodStopJacobiNotOpt");
+  LIKWID_MARKER_STOP("MethodStartJacobiNotOpt");
   // --------------------------------------------------  Resultados e liberação:
   fprintf(f_out, "----------\nGauss-Jacobi\n");
   for (int i = 0; i < n; ++i)
@@ -58,8 +58,8 @@ void gaussJacobi(FILE *f_in, FILE *f_out) {
   free(b);
   free(x);
   free(x1);
-  LIKWID_MARKER_STOP("FreeStopJacobiNotOpt");
-  LIKWID_MARKER_STOP("StopGaussJacobiNotOpt");
+  LIKWID_MARKER_STOP("FreeStartJacobiNotOpt");
+  LIKWID_MARKER_STOP("StartGaussJacobiNotOpt");
   LIKWID_MARKER_CLOSE;
 }
 

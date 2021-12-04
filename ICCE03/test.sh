@@ -86,7 +86,7 @@ echo "performance" > /sys/devices/system/cpu/cpufreq/policy3/scaling_governor
 for n in ${ns[@]}; do
   ./gerarSL $n >>  $diretorio/sistema_$n.res
   for group in ${groups[@]}; do
-    likwid-perfctr -C 3 -g $group -f -m ./gaussJacobi-likwid $diretorio/$n.res > $diretorio/$n.$group
+    likwid-perfctr -C 3 -g $group -f -m ./gaussJacobi-likwid $diretorio/sistema_$n.res > $diretorio/$n.$group
   done
 done
 
