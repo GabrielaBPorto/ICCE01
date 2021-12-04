@@ -1,9 +1,9 @@
 #!/bin/bash
 
-diretorio = /nobackup/ibm/gbp16/nobackup/bench
+diretorio='/nobackup/ibm/gbp16/nobackup/bench'
 
-rm -rf diretorio
-mkdir diretorio
+rm -rf $diretorio
+mkdir $diretorio
 
 versions=(gaussJacobi gaussJacobiOpt)
 groups=(L2CACHE L3 FLOPS_AVX)
@@ -86,13 +86,13 @@ plot_time() {
 }
 
 for n in ${ns[@]}; do
-  ./gerarSL $n >>  diretorio/$version.$n.res
+  ./gerarSL $n >>  $diretorio/sistema_$n.res
   for group in ${groups[@]}; do
-    likwid-perfctr -C 3 -g $group -f -m ./gaussJacobi-likwid diretorio/$n.res > diretorio/$n.$group
+    likwid-perfctr -C 3 -g $group -f -m ./gaussJacobi-likwid $diretorio/$n.res > $diretorio/$n.$group
   done
 done
 
-cd diretorio
+cd $diretorio
 
 plot ${groups[0]} "L2 miss ratio" "ratio" "$L2 Miss Ratio"
 plot ${groups[1]} "${groups[1]} bandwidth" "Bandwidth [MBytes/s]" "${groups[1]} cache"

@@ -1,11 +1,13 @@
 #!/bin/bash
 
-rm -rf /nobackup/ibm/gbp16/nobackup/bench
-mkdir /nobackup/ibm/gbp16/nobackup/bench
+diretorio='/nobackup/ibm/gbp16/nobackup/bench'
+
+rm -rf $diretorio
+mkdir $diretorio
 
 versions=(gaussJacobi gaussJacobiOpt)
 groups=(L2CACHE L3 FLOPS_AVX)
-ns=(10, 32, 50, 64, 100, 128, 200, 250, 256, 300, 400, 512, 600, 1000, 1024, 2000, 2048, 3000, 4096)
+ns=(10, 32)
 
 #  Fixar a frequencia do processador
 echo "performance" > /sys/devices/system/cpu/cpufreq/policy3/scaling_governor
@@ -81,18 +83,14 @@ echo "performance" > /sys/devices/system/cpu/cpufreq/policy3/scaling_governor
 #   done
 # }
 
-for version in ${versions[@]}; do
-  make clean && make purge faxina && make
-  for n in ${ns[@]}; do
-    for group in ${groups[@]}; do
-      ./gerarSL $n >> /nobackup/ibm/gbp16/nobackup/bench/$version.$n.in;
-      likwid-perfctr -C 3 -g $group -f -m ./gaussJacobi-likwid /nobackup/ibm/gbp16/nobackup/bench/$version.$n.in -o /nobackup/ibm/gbp16/nobackup/bench/$version.$n.res -i 10 > /nobackup/ibm/gbp16/nobackup/bench/$version.$n.$group
-    done
-  done	
-  cd -
+for n in ${ns[@]}; do
+  ./gerarSL $n >>  $diretorio/sistema_$n.res
+  for group in ${groups[@]}; do
+    likwid-perfctr -C 3 -g $group -f -m ./gaussJacobi-likwid $diretorio/$n.res > $diretorio/$n.$group
+  done
 done
 
-cd /nobackup/ibm/gbp16/nobackup/bench
+cd $diretorio
 
 # plot ${groups[0]} "L2 miss ratio" "ratio" "$L2 Miss Ratio"
 # plot ${groups[1]} "${groups[1]} bandwidth" "Bandwidth [MBytes/s]" "${groups[1]} cache"
