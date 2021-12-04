@@ -23,7 +23,7 @@ void gaussJacobiOpt(FILE *f_in, FILE *f_out) {
     A[i] = A[0] + i*PAD(n);
   double *b = (double *) malloc(sizeof(double) * PAD(n));
   double *x = (double *) malloc(sizeof(double) * PAD(n));
-  LIKWID_MARKER_STOP("AllocationStopJacobiOpt");?
+  LIKWID_MARKER_STOP("AllocationStopJacobiOpt");
   // --------------------------------------  leitura: matriz A, vetor b, vetor x
   LIKWID_MARKER_START("ReadingVectorStartJacobiOpt");
   for (int i = 0; i < n; ++i)
