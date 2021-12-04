@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <likwid.h>
 
 #include "utils.h"
 #include "libGaussJacobi.h"
@@ -9,19 +10,22 @@
 #define PAD(n) (isPot2(n)?(n+1):(n))
 
 void gaussJacobiOpt(FILE *f_in, FILE *f_out) {
-
+  LIKWID_MARKER_INIT;
+  LIKWID_MARKER_START("StartGaussJacobiOpt");
   int n;
   fscanf(f_in, "%d", &n);
 
   // -----------------------------------------  alocação:
+  LIKWID_MARKER_START("AllocationStartJacobiOpt");
   double **A = (double **) malloc(sizeof(double *) * n);
   A[0] = (double *) malloc(sizeof(double) * n*PAD(n));
   for (int i = 1; i < n; ++i)
     A[i] = A[0] + i*PAD(n);
   double *b = (double *) malloc(sizeof(double) * PAD(n));
   double *x = (double *) malloc(sizeof(double) * PAD(n));
-
+  LIKWID_MARKER_STOP("AllocationStopJacobiOpt");?
   // --------------------------------------  leitura: matriz A, vetor b, vetor x
+  LIKWID_MARKER_START("ReadingVectorStartJacobiOpt");
   for (int i = 0; i < n; ++i)
     for (int j = 0; j < n; ++j)
       fscanf(f_in, "%lf", &(A[i][j]));
@@ -29,8 +33,9 @@ void gaussJacobiOpt(FILE *f_in, FILE *f_out) {
     fscanf(f_in, "%lf", &(b[i]));
   for (int i = 0; i < n; ++i)
     fscanf(f_in, "%lf", &(x[i]));
-
+LIKWID_MARKER_STOP("ReadingVectorStopJacobiOpt");
   // --------------------------------------------------  Método:
+  LIKWID_MARKER_START("MethodStartJacobiOpt");
   double *x1 = (double *) malloc(sizeof(double) * PAD(n));
   double *x_atual = x;
   double *x_prox  = x1;
@@ -62,9 +67,10 @@ void gaussJacobiOpt(FILE *f_in, FILE *f_out) {
   }
   if (x_atual != x)
     memcpy(x, x_atual, sizeof(double) * PAD(n));
-
+  LIKWID_MARKER_STOP("MethodStopJacobiOpt");
   // --------------------------------------------------  Resultados e liberação:
   fprintf(f_out, "----------\nGauss-Jacobi Otimizado\n");
+  LIKWID_MARKER_START("FreeStartJacobiOpt");
   for (int i = 0; i < n; ++i)
     fprintf(f_out, "x%d = %1.15g\n", i+1, x[i]);
   free(A[0]);
@@ -72,5 +78,8 @@ void gaussJacobiOpt(FILE *f_in, FILE *f_out) {
   free(b);
   free(x);
   free(x1);
+  LIKWID_MARKER_STOP("FreeStopJacobiOpt");
+  LIKWID_MARKER_STOP("StopGaussJacobiOpt");
+  LIKWID_MARKER_CLOSE;
 }
 

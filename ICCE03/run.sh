@@ -1,9 +1,9 @@
 #!/bin/bash
 
-rm -rf /nobackup/bcc/gbp16/nobackup/bench
-mkdir /nobackup/bcc/gbp16/nobackup/bench
+rm -rf /nobackup/ibm/gbp16/nobackup/bench
+mkdir /nobackup/ibm/gbp16/nobackup/bench
 
-versions=(v2_icc_comzero v4_icc_SIMDv2)
+versions=(gaussJacobi gaussJacobiOpt)
 groups=(L2CACHE L3 FLOPS_AVX)
 nBands=(7 27)
 ns=(10, 32, 50, 64, 100, 128, 200, 250, 256, 300, 400, 512, 600, 1000, 1024, 2000, 2048, 3000, 4096)
@@ -92,7 +92,7 @@ for version in ${versions[@]}; do
   cd -
 done
 
-cd /nobackup/bcc/jns15/nobackup/bench
+cd /nobackup/ibm/gbp16/nobackup/bench
 
 plot ${groups[0]} "L2 miss ratio" "ratio" "$L2 Miss Ratio"
 plot ${groups[1]} "${groups[1]} bandwidth" "Bandwidth [MBytes/s]" "${groups[1]} cache"
