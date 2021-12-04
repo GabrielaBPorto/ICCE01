@@ -5,9 +5,8 @@ diretorio='/nobackup/ibm/gbp16/nobackup/bench'
 rm -rf $diretorio
 mkdir $diretorio
 
-versions=(gaussJacobi gaussJacobiOpt)
 groups=(L2CACHE L3 FLOPS_AVX)
-ns=(10, 32, 50, 64, 100, 128, 200, 250, 256, 300, 400, 512, 600, 1000, 1024, 2000, 2048, 3000, 4096)
+ns=(10 32 50 64 100 128 200 250 256 300 400 512 600 1000 1024 2000 2048 3000 4096)
 
 make;
 
@@ -38,11 +37,9 @@ plot() {
 
     for n in ${ns[@]}; do
       echo -n "$n " >> tmp
-      for version in ${versions[@]}; do
-        mvv=$(cat $version.$n.$group | grep "$2" | cut -d\| -f 3 | tr '\n' '\t' | cut -f 1 | sed -e 's/ //g')
-        mmv=$(cat $version.$n.$group | grep "$2" | cut -d\| -f 3 | tr '\n' '\t' | cut -f 2 | sed -e 's/ //g')
+        mvv=$(cat $n.$group | grep "$2" | cut -d\| -f 3 | tr '\n' '\t' | cut -f 1 | sed -e 's/ //g')
+        mmv=$(cat $n.$group | grep "$2" | cut -d\| -f 3 | tr '\n' '\t' | cut -f 2 | sed -e 's/ //g')
         echo -n "$mvv $mmv " >> tmp
-      done
       echo "" >> tmp
     done
     gnuplot $group.data
@@ -68,15 +65,13 @@ plot_time() {
                   'tmp' u 1:4 w l lt rgb 'green'  lw 2  title 'v4-mvv', 'tmp' u 1:5 w l lt rgb 'purple' lw 2 title 'v4-mmv' " >> $group.data
     for n in ${ns[@]}; do
       echo -n "$n " >> tmp
-      for version in ${versions[@]}; do
-        loop=$(cat $version.$n.res | grep "Tempo método CG" | cut -d":" -f2 | cut -d"<" -f2 | cut -d">" -f1 | sed -e 's/ //g')
-        mvv=$(cat $version.$n.FLOPS_AVX | grep "$2" | cut -d\| -f 3 | tr '\n' '\t' | cut -f 1 | sed -e 's/ //g')
-        mmv=$(cat $version.$n.FLOPS_AVX | grep "$2" | cut -d\| -f 3 | tr '\n' '\t' | cut -f 2 | sed -e 's/ //g')
-        x=$(echo "$mvv * 100" | bc -l | awk '{printf "%f", $0}')
-        y=$(echo "$mmv * 100" | bc -l | awk '{printf "%f", $0}')
-        echo -n "$x $y " >> tmp
-        rm $version.$n.res
-      done
+      loop=$(cat $n.res | grep "Tempo método CG" | cut -d":" -f2 | cut -d"<" -f2 | cut -d">" -f1 | sed -e 's/ //g')
+      mvv=$(cat $n.FLOPS_AVX | grep "$2" | cut -d\| -f 3 | tr '\n' '\t' | cut -f 1 | sed -e 's/ //g')
+      mmv=$(cat $n.FLOPS_AVX | grep "$2" | cut -d\| -f 3 | tr '\n' '\t' | cut -f 2 | sed -e 's/ //g')
+      x=$(echo "$mvv * 100" | bc -l | awk '{printf "%f", $0}')
+      y=$(echo "$mmv * 100" | bc -l | awk '{printf "%f", $0}')
+      echo -n "$x $y " >> tmp
+      rm sistema_$n.res
       echo "" >> tmp
     done
     gnuplot $group.data
