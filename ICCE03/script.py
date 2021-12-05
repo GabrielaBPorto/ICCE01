@@ -34,6 +34,11 @@ def getGroupTable(group: str, size: int, columns: list = None) -> pd.DataFrame:
                 tables[currentTable] = {}
         elif lineSplit[0] == "STRUCT":
             currentTable = 'trash'
+        else:
+            try:
+                tables[currentTable][lineSplit[0]] = float(lineSplit[1])
+            except:
+                tables[currentTable][lineSplit[0]] = lineSplit[1]
     # Remove lixo do lido
     tables.pop('trash')
 
@@ -46,13 +51,20 @@ def getGroupTable(group: str, size: int, columns: list = None) -> pd.DataFrame:
     df = df.set_index([df.index, "n_size"])
     return df
 
+cmdPerformance = "echo \"performance\" > /sys/devices/system/cpu/cpufreq/policy3/scaling_governor"
+os.system(cmdPerformance)
+
+cmdRM = f"rm -rf {diretorio}"
+os.system(cmdRM)
+cmdMkDir = f"mkdir {diretorio}"
+os.system(cmdMkDir)
 
 cmdMake = f"make"
 print (cmdMake)
 os.system(cmdMake)
 
 # %%
-testColumns = ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count']+['L3 bandwidth [MBytes/s]']+['DP MFLOP/s', 'AVX DP MFLOP/s']
+testColumns = ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count']+['L3 bandwidth [MBytes/s]']+['DP [MFLOP/s]', 'AVX DP [MFLOP/s]']
 dfFinal = pd.DataFrame(columns = testColumns,dtype=np.float64)
 for size in expected_sizes:
     cmdEntrada = f"./geraSL {size} > results/sistema_{size}.res"
@@ -60,7 +72,7 @@ for size in expected_sizes:
     os.system(cmdEntrada)
     L2CACHE_table = getGroupTable('L2CACHE', size, ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count'])
     L3_table = getGroupTable('L3', size, ['L3 bandwidth [MBytes/s]'])
-    FLOPS_DP_table = getGroupTable('FLOPS_DP', size, ['DP MFLOP/s', 'AVX DP MFLOP/s'])
+    FLOPS_DP_table = getGroupTable('FLOPS_DP', size, ['DP [MFLOP/s]', 'AVX DP [MFLOP/s]'])
     dfr = pd.concat([L2CACHE_table,L3_table,FLOPS_DP_table], axis=1)
     dfr["AVG TIME"] = dfr['Runtime (RDTSC) [s]']/dfr['call count']
 
@@ -77,6 +89,9 @@ for col in testColumns:
     except:
         pass
 
+
+cmdPowerSave = "echo \"powersave\" > /sys/devices/system/cpu/cpufreq/policy3/scaling_governor"
+os.system(cmdPowerSave)
 
 cmdMake = f"make clean; make purge faxina"
 print (cmdMake)
