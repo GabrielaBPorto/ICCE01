@@ -18,7 +18,7 @@
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-all: likwid
+all: likwid geraSL
 
 debug:            CFLAGS += -g -DDEBUG
 avx:              CFLAGS += $(AVX_FLAGS)

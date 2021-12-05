@@ -81,7 +81,7 @@ plot_time() {
 }
 
 for n in ${ns[@]}; do
-  #./gerarSL $n >>  $diretorio/sistema_$n.res
+  ./gerarSL $n >>  $diretorio/sistema_$n.res
   for group in ${groups[@]}; do
     likwid-perfctr -C 3 -g $group -f -m ./gaussJacobi-likwid $diretorio/sistema_$n.res > $diretorio/$n.$group
   done
