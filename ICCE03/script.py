@@ -82,17 +82,18 @@ dfFinal[['region', 'n_size']]= dfFinal.index.tolist()
 dfFinal.to_csv("./results/tabelaFinal.csv")
 for size in expected_sizes:
     dfSize = dfFinal.loc[dfFinal['n_size'] == size]
-    print(dfSize)
     for col in testColumns:
         if(col == "call count"):
             continue
-        dfSize.loc[:,col]=dfSize.loc[:,col].apply(lambda x :float(x))
+        dfSize.loc[:,col].apply(lambda x :float(x))
         try:
             path = os.path.join('./results/',col.replace('/','p').replace(' ','_')+'_'+str(size)+'.png')
             plt.figure(figsize=(14, 7))
             g = sns.barplot(data =dfSize, x='region', y =col, hue='region')
             g.legend_.remove()
-            g.figure.savefig(path)
+            if (col == "Runtime (RDTSC) [s]"):
+                g.set_yscale('log')
+            g.figure.savefig(path)            
             plt.close()
         except:
             print(path + " deu ruim")
