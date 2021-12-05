@@ -11,21 +11,21 @@
 
 void gaussJacobiOpt(FILE *f_in, FILE *f_out) {
   LIKWID_MARKER_INIT;
-  LIKWID_MARKER_START("StartGaussJacobiOpt");
+  LIKWID_MARKER_START("StartOpt");
   int n;
   fscanf(f_in, "%d", &n);
 
   // -----------------------------------------  alocação:
-  LIKWID_MARKER_START("AllocationStartJacobiOpt");
+  LIKWID_MARKER_START("AllocOpt");
   double **A = (double **) malloc(sizeof(double *) * n);
   A[0] = (double *) malloc(sizeof(double) * n*PAD(n));
   for (int i = 1; i < n; ++i)
     A[i] = A[0] + i*PAD(n);
   double *b = (double *) malloc(sizeof(double) * PAD(n));
   double *x = (double *) malloc(sizeof(double) * PAD(n));
-  LIKWID_MARKER_STOP("AllocationStartJacobiOpt");
+  LIKWID_MARKER_STOP("AllocOpt");
   // --------------------------------------  leitura: matriz A, vetor b, vetor x
-  LIKWID_MARKER_START("ReadingVectorStartJacobiOpt");
+  LIKWID_MARKER_START("ReadOpt");
   for (int i = 0; i < n; ++i)
     for (int j = 0; j < n; ++j)
       fscanf(f_in, "%lf", &(A[i][j]));
@@ -33,9 +33,9 @@ void gaussJacobiOpt(FILE *f_in, FILE *f_out) {
     fscanf(f_in, "%lf", &(b[i]));
   for (int i = 0; i < n; ++i)
     fscanf(f_in, "%lf", &(x[i]));
-LIKWID_MARKER_STOP("ReadingVectorStartJacobiOpt");
+LIKWID_MARKER_STOP("ReadOpt");
   // --------------------------------------------------  Método:
-  LIKWID_MARKER_START("MethodStartJacobiOpt");
+  LIKWID_MARKER_START("JacobOpt");
   double *x1 = (double *) malloc(sizeof(double) * PAD(n));
   double *x_atual = x;
   double *x_prox  = x1;
@@ -67,10 +67,10 @@ LIKWID_MARKER_STOP("ReadingVectorStartJacobiOpt");
   }
   if (x_atual != x)
     memcpy(x, x_atual, sizeof(double) * PAD(n));
-  LIKWID_MARKER_STOP("MethodStartJacobiOpt");
+  LIKWID_MARKER_STOP("JacobOpt");
   // --------------------------------------------------  Resultados e liberação:
   fprintf(f_out, "----------\nGauss-Jacobi Otimizado\n");
-  LIKWID_MARKER_START("FreeStartJacobiOpt");
+  LIKWID_MARKER_START("FreeOpt");
   for (int i = 0; i < n; ++i)
     fprintf(f_out, "x%d = %1.15g\n", i+1, x[i]);
   free(A[0]);
@@ -78,8 +78,8 @@ LIKWID_MARKER_STOP("ReadingVectorStartJacobiOpt");
   free(b);
   free(x);
   free(x1);
-  LIKWID_MARKER_STOP("FreeStartJacobiOpt");
-  LIKWID_MARKER_STOP("StartGaussJacobiOpt");
+  LIKWID_MARKER_STOP("FreeOpt");
+  LIKWID_MARKER_STOP("StartOpt");
   LIKWID_MARKER_CLOSE;
 }
 

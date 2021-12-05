@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import seaborn as sns
-expected_sizes = [10, 32]
+expected_sizes = [10]
 ## expected_sizes = [64, 100, 128, 500]
 #expected_sizes = [5,10]
 
@@ -81,12 +81,20 @@ for size in expected_sizes:
 dfFinal[['region', 'n_size']]= dfFinal.index.tolist()
 dfFinal.to_csv("./results/tabelaFinal.csv")
 for col in testColumns:
+    if(col == "call count"):
+        continue
     dfFinal.loc[:,col]=dfFinal.loc[:,col].apply(lambda x :float(x))
     try:
         path = os.path.join('./results/',col.replace('/','p').replace(' ','_')+'.png')
-        sns.lineplot(data =dfFinal, x='n_size', y =col, hue='region').figure.savefig(path)
+        plt.figure(figsize=(14, 7))
+        g = sns.barplot(data =dfFinal, x='n_size', y =col, hue='region')
+        sns.move_legend(g, "upper left")
+        # g.figure.set_figwidth(12)
+        # g.figure.set_figheight(10)
+        g.figure.savefig(path)
         plt.close()
     except:
+        print(path + " deu ruim")
         pass
 
 
