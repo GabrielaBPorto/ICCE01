@@ -47,6 +47,10 @@ def getGroupTable(group: str, size: int, columns: list = None) -> pd.DataFrame:
     return df
 
 
+cmdMake = f"make"
+print (cmdMake)
+os.system(cmdMake)
+
 # %%
 testColumns = ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count']+['L3 bandwidth [MBytes/s]']+['DP MFLOP/s', 'AVX DP MFLOP/s']
 dfFinal = pd.DataFrame(columns = testColumns,dtype=np.float64)
@@ -72,3 +76,8 @@ for col in testColumns:
         plt.close()
     except:
         pass
+
+
+cmdMake = f"make clean; make purge faxina"
+print (cmdMake)
+os.system(cmdMake)
