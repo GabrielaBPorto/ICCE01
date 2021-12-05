@@ -1,3 +1,4 @@
 ignore all files
 */results/*
 analiseIntervalar
+*/*_[0-9]*

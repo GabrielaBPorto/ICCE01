@@ -1,9 +1,9 @@
 #!/bin/bash
 
-diretorio='/nobackup/ibm/gbp16/nobackup/bench'
+diretorio='./results'
 
-rm -rf $diretorio
-mkdir $diretorio
+#rm -rf $diretorio
+#mkdir $diretorio
 
 groups=(L2CACHE L3 FLOPS_AVX)
 ns=(10 32)
@@ -81,7 +81,7 @@ plot_time() {
 }
 
 for n in ${ns[@]}; do
-  ./gerarSL $n >>  $diretorio/sistema_$n.res
+  #./gerarSL $n >>  $diretorio/sistema_$n.res
   for group in ${groups[@]}; do
     likwid-perfctr -C 3 -g $group -f -m ./gaussJacobi-likwid $diretorio/sistema_$n.res > $diretorio/$n.$group
   done
