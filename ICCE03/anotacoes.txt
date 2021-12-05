@@ -1,7 +1,12 @@
 \begin{resumo}
-Tem-se como objetivo apresentar igualdades e diferenças entre duas implementaçõs do métodos de Gauss Jacobi, uma fazendo a utilização de práticas de otiimzação discutidas em aula
-
+Tem-se como objetivo apresentar igualdades e diferenças entre duas implementaçõs do métodos de Gauss Jacobi, uma fazendo a utilização de práticas de otiimzação discutidas em aula.
 \end{resumo}
+
+\section{funcionamento}
+Para rodar o trabalho, use o seguinte comando:
+    sudo python3 script.py
+Além disso, pode ser necessário realizar update ou instalar as bibliotecas python relevantes (pandas, matplotlib, seaborn, numpy) na máquina onde serão realizados os testes.
+\section{funcionamento}
 
 \section{Marcadores}
 Foram realizados marcadores para:
