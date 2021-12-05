@@ -1,11 +1,13 @@
 Igualdades:
-A leitura dos dois são iguais, visto que não tem muita alterações para ser feitas
+\item Ambos realizam uso de variaveis locais, alocadas no inicio das funções, ficam na L1 da cache, ou seja, ficam mais próximo da memória, permitindo menos cache miss.
+\item A leitura dos dois são iguais, visto que não tem muita alterações para ser feitas
 
 
 Diferenças:
-Faz alocação inicial do ponteiro A[0] separado do resto, e utilizado ele para gerar os seguintes ponteiro de vtores usando o calculo de PAD
-Quando realizando a alocação está sendo calculado para fechar mais ocrretamente com o size passado em parametro
-A maior diferença entre o gauss não otimizado e otimizado é o fato que ele está fazendo somas por blocos, fazendo com que o for de calculo terá que percorrer % 4 vezes
-Quando está fazendo acessos para leitura ou escrita de dados, utiliza-se ponteiros realizando acesso direto ao conteudo
-Faz a utilização da função memcpy que é modificada para ser o meio mais otimizado de limpar a memória com um dado único em variavel
-Liberação de memória mais rapida, considerando-se que todos os nós se baseiam no A[0], faz com que não se tenha necessidade de um loop para a liberação da memória.
+\item Alocação demanda muito tempo, e pode ter a heap comprometida, no código otimizado é feito alocação inicial do ponteiro A[0] separado do resto, e utilizado ele para gerar os seguintes ponteiro de vtores usando o calculo de PAD
+\item Quando realizando a alocação está sendo calculado para fechar mais ocrretamente com o size passado em parametro
+\item A maior diferença entre o gauss não otimizado e otimizado é o fato que ele está fazendo somas por blocos, fazendo com que o for de calculo terá que percorrer n / 4 vezes invés de n
+\item Quando está fazendo acessos para leitura ou escrita de dados, utiliza-se ponteiros realizando acesso direto ao conteudo
+\item Faz a utilização da função memcpy que é modificada para ser o meio mais otimizado de limpar a memória com um dado único em variavel
+\item Não tendo a necessidade de tanto gerenciamento de ponteiro pelo meio de alocação, a liberação de memória mais rapida, considerando-se que todos os nós se baseiam no A[0], faz com que não se tenha necessidade de um loop para a liberação da memória.
+\item Modificação simples, mas fazendo a remoção de desvio, ou if 
