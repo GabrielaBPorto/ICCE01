@@ -11,3 +11,4 @@ Diferenças:
 \item Faz a utilização da função memcpy que é modificada para ser o meio mais otimizado de limpar a memória com um dado único em variavel
 \item Não tendo a necessidade de tanto gerenciamento de ponteiro pelo meio de alocação, a liberação de memória mais rapida, considerando-se que todos os nós se baseiam no A[0], faz com que não se tenha necessidade de um loop para a liberação da memória.
 \item Modificação simples, mas fazendo a remoção de desvio, ou if 
+\item é feito um loop unrolling, o laço externo é atravessado com um passo (stride) de m
