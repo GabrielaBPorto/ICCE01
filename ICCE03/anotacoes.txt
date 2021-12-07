@@ -2,11 +2,12 @@
 Tem-se como objetivo apresentar igualdades e diferenças entre duas implementaçõs do métodos de Gauss Jacobi, uma fazendo a utilização de práticas de otiimzação discutidas em aula.
 \end{resumo}
 
-\section{funcionamento}
+\section{Funcionamento}
 Para rodar o trabalho, use o seguinte comando:
     sudo python3 script.py
 Além disso, pode ser necessário realizar update ou instalar as bibliotecas python relevantes (pandas, matplotlib, seaborn, numpy) na máquina onde serão realizados os testes.
-\section{funcionamento}
+Lembrar de setar o diretório para algum ambiente local
+Pode vir a dar erro por diferença entre versões e pode ter a necessidade de modificação das linhas: 67 e 75 para: ['DP [MFLOP/s]', 'AVX DP [MFLOP/s]']
 
 \section{Marcadores}
 Foram realizados marcadores para:
@@ -33,3 +34,7 @@ Foram realizados marcadores para:
     \item Faz a utilização da função memcpy que é modificada para ser o meio mais otimizado de limpar a memória com um dado único em variavel
     \item Não tendo a necessidade de tanto gerenciamento de ponteiro pelo meio de alocação, a liberação de memória mais rapida, considerando-se que todos os nós se baseiam no A[0], faz com que não se tenha necessidade de um loop para a liberação da memória.
 \end{itemize}
+
+
+Os gráficos do AVX_DP_MFLOPSps não estão apresentando resultados e por causa disso não foram enviadas no trabalho, mas caso rode o script eles continuaram a ser gerados
+

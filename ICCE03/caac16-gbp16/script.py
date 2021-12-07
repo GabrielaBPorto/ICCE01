@@ -4,6 +4,7 @@ import pandas as pd
 import os
 import seaborn as sns
 expected_sizes = [10, 32, 50, 64, 100, 128, 200, 250, 256, 300, 400, 512, 600, 1000, 1024, 2000, 2048, 3000, 4096]
+# 10, 32, 50, 64, 100, 128, 200, 250, 256, 300, 400, 512, 600, 1000, 1024, 2000, 2048, 3000, 4096
 
 diretorio='/nobackup/ibm/gbp16/nobackup'
 #diretorio='./results'
