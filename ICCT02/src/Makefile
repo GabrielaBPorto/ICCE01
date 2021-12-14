@@ -1,5 +1,4 @@
-       PROG   = trab1 $(AVX_FLAGS)
-     PROG_AUX = broyden
+       PROG   = trab1
 
            CC = gcc # -std=c11
          OBJS = utils.o newton.o
@@ -8,10 +7,11 @@
  LIKWID_FLAGS = -I$(LIKWID)/include -DLIKWID_PERFMON 
   LIKWID_LIBS = -L$(LIKWID)/lib -llikwid
 
-    AVX_FLAGS = -O3 -mavx2 -march=native -fopt-info-vec -I/usr/include -L/usr/lib -lmatheval # -fstrict-aliasing
+    AVX_FLAGS = -O3 -mavx2 -march=native -fopt-info-vec # -fstrict-aliasing
+    CFLAGS = -lm -g -I/usr/include -L/usr/lib -lmatheval
 
-       CFLAGS = $(AVX_FLAGS) $(LIKWID_FLAGS)
-       LFLAGS = $(LIKWID_LIBS) -lm
+      #  CFLAGS = $(AVX_FLAGS) $(LIKWID_FLAGS)
+       LFLAGS = $(LIKWID_LIBS)
 
 .PHONY: all debug clean limpa purge faxina
 
@@ -21,16 +21,13 @@
 all: likwid
 
 debug:            CFLAGS += -g -DDEBUG
-avx:              CFLAGS += $(AVX_FLAGS)
+#avx:              CFLAGS += $(AVX_FLAGS)
 
 avx likwid debug: $(PROG)
 
-
 $(PROG) : % : $(OBJS) %.o
-	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
-
-$(PROG_AUX) : $(PROG_AUX).o
-	$(CC) -o $@ $^ -lm 
+	$(CC) -o $@ $^ $(CFLAGS)
+  #$(LFLAGS)
 
 clean limpa:
 	@echo "Limpando ...."
