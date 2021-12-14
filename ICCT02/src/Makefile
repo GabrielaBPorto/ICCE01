@@ -8,11 +8,10 @@
   LIKWID_LIBS = -L$(LIKWID)/lib -llikwid
 
     AVX_FLAGS = -O3 -mavx2 -march=native -fopt-info-vec # -fstrict-aliasing
-    CFLAGS = -lm -g -I/usr/include -L/usr/lib -lmatheval
 
-      #  CFLAGS = $(AVX_FLAGS) $(LIKWID_FLAGS)
-       LFLAGS = $(LIKWID_LIBS)
-
+      LFLAGS = $(LIKWID_LIBS)
+      CFLAGS = $(LIKWID_FLAGS) 
+      CFLAGS += -lm -g -I/usr/include -L/usr/lib -lmatheval
 .PHONY: all debug clean limpa purge faxina
 
 %.o: %.c %.h
@@ -21,13 +20,13 @@
 all: likwid
 
 debug:            CFLAGS += -g -DDEBUG
-#avx:              CFLAGS += $(AVX_FLAGS)
+avx:              CFLAGS += $(AVX_FLAGS)
 
 avx likwid debug: $(PROG)
 
 $(PROG) : % : $(OBJS) %.o
-	$(CC) -o $@ $^ $(CFLAGS)
-  #$(LFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS)
+  
 
 clean limpa:
 	@echo "Limpando ...."

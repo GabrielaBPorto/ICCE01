@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import seaborn as sns
-expected_sizes = [10, 32, 50, 64, 100, 128, 200, 250, 256, 300, 400, 512, 600, 1000, 1024, 2000, 2048, 3000, 4096]
+expected_sizes = [10, 32]
 # 10, 32, 50, 64, 100, 128, 200, 250, 256, 300, 400, 512, 600, 1000, 1024, 2000, 2048, 3000, 4096
 
-diretorio='/nobackup/ibm/gbp16/nobackup'
-#diretorio='./results'
+# diretorio='/nobackup/ibm/gbp16/nobackup'
+diretorio='./results'
 
 # %%
 def getGroupTable(group: str, size: int, columns: list = None) -> pd.DataFrame:
@@ -59,12 +59,12 @@ os.system(cmdRM)
 cmdMkDir = f"mkdir {diretorio}"
 os.system(cmdMkDir)
 
-cmdMake = f"make"
+cmdMake = f"make avx"
 print (cmdMake)
 os.system(cmdMake)
 
 # %%
-testColumns = ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count']+['L3 bandwidth [MBytes/s]']+['DP MFLOP/s', 'AVX DP MFLOP/s']
+testColumns = ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count']+['L3 bandwidth [MBytes/s]']+['DP [MFLOP/s]', 'AVX DP [MFLOP/s]']
 dfFinal = pd.DataFrame(columns = testColumns,dtype=np.float64)
 for size in expected_sizes:
     cmdEntrada = f"./geraSL {size} > {diretorio}/sistema_{size}.res"
@@ -72,7 +72,7 @@ for size in expected_sizes:
     os.system(cmdEntrada)
     L2CACHE_table = getGroupTable('L2CACHE', size, ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count'])
     L3_table = getGroupTable('L3', size, ['L3 bandwidth [MBytes/s]'])
-    FLOPS_DP_table = getGroupTable('FLOPS_DP', size, ['DP MFLOP/s', 'AVX DP MFLOP/s'])
+    FLOPS_DP_table = getGroupTable('FLOPS_DP', size, ['DP [MFLOP/s]', 'AVX DP [MFLOP/s]'])
     dfr = pd.concat([L2CACHE_table,L3_table,FLOPS_DP_table], axis=1)
     dfr["AVG TIME"] = dfr['Runtime (RDTSC) [s]']/dfr['call count']
 

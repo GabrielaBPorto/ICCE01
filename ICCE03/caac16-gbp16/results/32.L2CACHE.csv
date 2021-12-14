@@ -1,0 +1,115 @@
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.900985482 GHz,
+TABLE,Region StartNotOpt,Group 1 Raw,L2CACHE,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.001636,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,2252025
+CPU_CLK_UNHALTED_CORE,FIXC1,1838982
+CPU_CLK_UNHALTED_REF,FIXC2,1982343
+L2_TRANS_ALL_REQUESTS,PMC0,26647
+L2_RQSTS_MISS,PMC1,8648
+TABLE,Region StartNotOpt,Group 1 Metric,L2CACHE,7
+Metric,HWThread 3,
+Runtime (RDTSC) [s],0.0016,
+Runtime unhalted [s],0.0006,
+Clock [MHz],2691.1892,
+CPI,0.8166,
+L2 request rate,0.0118,
+L2 miss rate,0.0038,
+L2 miss ratio,0.3245,
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.900985482 GHz,
+TABLE,Region AllocNotOpt,Group 1 Raw,L2CACHE,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.000007,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,10851
+CPU_CLK_UNHALTED_CORE,FIXC1,21616
+CPU_CLK_UNHALTED_REF,FIXC2,23232
+L2_TRANS_ALL_REQUESTS,PMC0,2120
+L2_RQSTS_MISS,PMC1,681
+TABLE,Region AllocNotOpt,Group 1 Metric,L2CACHE,7
+Metric,HWThread 3,
+Runtime (RDTSC) [s],6.716646e-06,
+Runtime unhalted [s],7.451261e-06,
+Clock [MHz],2699.1952,
+CPI,1.9921,
+L2 request rate,0.1954,
+L2 miss rate,0.0628,
+L2 miss ratio,0.3212,
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.900985482 GHz,
+TABLE,Region ReadNotOpt,Group 1 Raw,L2CACHE,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.000525,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,1731196
+CPU_CLK_UNHALTED_CORE,FIXC1,1410976
+CPU_CLK_UNHALTED_REF,FIXC2,1521212
+L2_TRANS_ALL_REQUESTS,PMC0,6018
+L2_RQSTS_MISS,PMC1,1978
+TABLE,Region ReadNotOpt,Group 1 Metric,L2CACHE,7
+Metric,HWThread 3,
+Runtime (RDTSC) [s],0.0005,
+Runtime unhalted [s],0.0005,
+Clock [MHz],2690.7630,
+CPI,0.8150,
+L2 request rate,0.0035,
+L2 miss rate,0.0011,
+L2 miss ratio,0.3287,
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.900985482 GHz,
+TABLE,Region JacobiNotOpt,Group 1 Raw,L2CACHE,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.000082,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,382136
+CPU_CLK_UNHALTED_CORE,FIXC1,228437
+CPU_CLK_UNHALTED_REF,FIXC2,246114
+L2_TRANS_ALL_REQUESTS,PMC0,3343
+L2_RQSTS_MISS,PMC1,997
+TABLE,Region JacobiNotOpt,Group 1 Metric,L2CACHE,7
+Metric,HWThread 3,
+Runtime (RDTSC) [s],0.0001,
+Runtime unhalted [s],0.0001,
+Clock [MHz],2692.6238,
+CPI,0.5978,
+L2 request rate,0.0087,
+L2 miss rate,0.0026,
+L2 miss ratio,0.2982,
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.900985482 GHz,
+TABLE,Region FreeNotOpt,Group 1 Raw,L2CACHE,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.000002,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,8667
+CPU_CLK_UNHALTED_CORE,FIXC1,16001
+CPU_CLK_UNHALTED_REF,FIXC2,17303
+L2_TRANS_ALL_REQUESTS,PMC0,2427
+L2_RQSTS_MISS,PMC1,796
+TABLE,Region FreeNotOpt,Group 1 Metric,L2CACHE,7
+Metric,HWThread 3,
+Runtime (RDTSC) [s],1.750701e-06,
+Runtime unhalted [s],5.515712e-06,
+Clock [MHz],2682.6948,
+CPI,1.8462,
+L2 request rate,0.2800,
+L2 miss rate,0.0918,
+L2 miss ratio,0.3280,

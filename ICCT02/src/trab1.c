@@ -4,16 +4,23 @@
 #include <string.h>
 #include <matheval.h>
 #include <assert.h>
+#include <likwid.h>
 
 int main(int argc, char *argv[]){
+
+	LIKWID_MARKER_INIT;
+  	LIKWID_MARKER_START("StartNewtonTrab1");
 
 	// Declaração de variavel
 	int dim;
 	void *eval;
 	double tempos[4];
 
-	output = trataSaida(argc, argv);
+	output = stdout;
+	// trataSaida(argc, argv);
 	input = stdin;
+
+	printf("Tratou saida\n");
 
 	while (fscanf(input, "%d\n", &dim) != EOF)
 	{
@@ -40,6 +47,8 @@ int main(int argc, char *argv[]){
 		fprintf(output,"# Tempo SL: %.6lf \n", tempos[3]);
 		fprintf(output,"###########\n\n");
 	}
-	
+	LIKWID_MARKER_STOP("StartNewtonTrab1");
+	LIKWID_MARKER_CLOSE;
+
 	return 0;
 }

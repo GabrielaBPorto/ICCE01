@@ -23,7 +23,7 @@ all: likwid geraSL
 debug:            CFLAGS += -g -DDEBUG
 avx:              CFLAGS += $(AVX_FLAGS)
 
-avx likwid debug: $(PROG)
+avx likwid debug: $(PROG) $(PROG_AUX)
 
 $(PROG_AUX).o: $(PROG_AUX).c
 	$(CC) -c $< -o $@

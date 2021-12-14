@@ -1,0 +1,11 @@
+,L2 miss ratio,Runtime (RDTSC) [s],call count,L3 bandwidth [MBytes/s],DP [MFLOP/s],AVX DP [MFLOP/s],AVG TIME,region,n_size
+"('StartNotOpt', 10)",0.3295,0.0011,1.0,464.6803,7.9071,0.0,0.0011,StartNotOpt,10
+"('AllocNotOpt', 10)",0.3538,1.469707e-06,1.0,29586.5124,6.429,0.0,1.469707e-06,AllocNotOpt,10
+"('ReadNotOpt', 10)",0.3701,0.0001,1.0,1486.5341,1.9728,0.0,0.0001,ReadNotOpt,10
+"('JacobiNotOpt', 10)",0.3111,8.839936e-06,1.0,4383.4326,1126.7438,0.0,8.839936e-06,JacobiNotOpt,10
+"('FreeNotOpt', 10)",0.2945,5.788607e-07,1.0,58949.0157,17.794,0.0,5.788607e-07,FreeNotOpt,10
+"('StartNotOpt', 32)",0.3245,0.0016,1.0,298.8702,59.8735,0.0,0.0016,StartNotOpt,32
+"('AllocNotOpt', 32)",0.3212,6.716646e-06,1.0,5348.3534,1.3195,0.0,6.716646e-06,AllocNotOpt,32
+"('ReadNotOpt', 32)",0.3287,0.0005,1.0,322.7758,2.0751,0.0,0.0005,ReadNotOpt,32
+"('JacobiNotOpt', 32)",0.2982,0.0001,1.0,454.8134,1299.7986,0.0,0.0001,JacobiNotOpt,32
+"('FreeNotOpt', 32)",0.328,1.750701e-06,1.0,24698.4882,5.9435,0.0,1.750701e-06,FreeNotOpt,32

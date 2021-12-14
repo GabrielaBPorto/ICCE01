@@ -1,0 +1,130 @@
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.902646173 GHz,
+TABLE,Region StartNotOpt,Group 1 Raw,L3,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.001042,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,302805
+CPU_CLK_UNHALTED_CORE,FIXC1,334882
+CPU_CLK_UNHALTED_REF,FIXC2,359491
+L2_LINES_IN_ALL,PMC0,6082
+L2_TRANS_L2_WB,PMC1,1485
+TABLE,Region StartNotOpt,Group 1 Metric,L3,10
+Metric,HWThread 3,
+Runtime (RDTSC) [s],0.0010,
+Runtime unhalted [s],0.0001,
+Clock [MHz],2703.9452,
+CPI,1.1059,
+L3 load bandwidth [MBytes/s],373.4883,
+L3 load data volume [GBytes],0.0004,
+L3 evict bandwidth [MBytes/s],91.1921,
+L3 evict data volume [GBytes],0.0001,
+L3 bandwidth [MBytes/s],464.6803,
+L3 data volume [GBytes],0.0005,
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.902646173 GHz,
+TABLE,Region AllocNotOpt,Group 1 Raw,L3,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.000001,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,6547
+CPU_CLK_UNHALTED_CORE,FIXC1,13017
+CPU_CLK_UNHALTED_REF,FIXC2,13794
+L2_LINES_IN_ALL,PMC0,470
+L2_TRANS_L2_WB,PMC1,105
+TABLE,Region AllocNotOpt,Group 1 Metric,L3,10
+Metric,HWThread 3,
+Runtime (RDTSC) [s],1.243810e-06,
+Runtime unhalted [s],4.484529e-06,
+Clock [MHz],2739.1435,
+CPI,1.9882,
+L3 load bandwidth [MBytes/s],24183.7580,
+L3 load data volume [GBytes],3.008000e-05,
+L3 evict bandwidth [MBytes/s],5402.7544,
+L3 evict data volume [GBytes],6.720000e-06,
+L3 bandwidth [MBytes/s],29586.5124,
+L3 data volume [GBytes],3.680000e-05,
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.902646173 GHz,
+TABLE,Region ReadNotOpt,Group 1 Raw,L3,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.000067,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,188435
+CPU_CLK_UNHALTED_CORE,FIXC1,174179
+CPU_CLK_UNHALTED_REF,FIXC2,187429
+L2_LINES_IN_ALL,PMC0,1260
+L2_TRANS_L2_WB,PMC1,307
+TABLE,Region ReadNotOpt,Group 1 Metric,L3,10
+Metric,HWThread 3,
+Runtime (RDTSC) [s],0.0001,
+Runtime unhalted [s],0.0001,
+Clock [MHz],2697.4481,
+CPI,0.9243,
+L3 load bandwidth [MBytes/s],1195.2987,
+L3 load data volume [GBytes],0.0001,
+L3 evict bandwidth [MBytes/s],291.2355,
+L3 evict data volume [GBytes],1.964800e-05,
+L3 bandwidth [MBytes/s],1486.5341,
+L3 data volume [GBytes],0.0001,
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.902646173 GHz,
+TABLE,Region JacobiNotOpt,Group 1 Raw,L3,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.000009,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,46245
+CPU_CLK_UNHALTED_CORE,FIXC1,33271
+CPU_CLK_UNHALTED_REF,FIXC2,36058
+L2_LINES_IN_ALL,PMC0,508
+L2_TRANS_L2_WB,PMC1,113
+TABLE,Region JacobiNotOpt,Group 1 Metric,L3,10
+Metric,HWThread 3,
+Runtime (RDTSC) [s],9.066867e-06,
+Runtime unhalted [s],1.146230e-05,
+Clock [MHz],2678.2944,
+CPI,0.7195,
+L3 load bandwidth [MBytes/s],3585.8031,
+L3 load data volume [GBytes],3.251200e-05,
+L3 evict bandwidth [MBytes/s],797.6294,
+L3 evict data volume [GBytes],7.232000e-06,
+L3 bandwidth [MBytes/s],4383.4326,
+L3 data volume [GBytes],3.974400e-05,
+STRUCT,Info,3
+CPU name:,Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz,
+CPU type:,Intel Kabylake processor,
+CPU clock:,2.902646173 GHz,
+TABLE,Region FreeNotOpt,Group 1 Raw,L3,5
+Region Info,HWThread 3,
+RDTSC Runtime [s],0.000001,
+call count,1,
+Event,Counter,HWThread 3
+INSTR_RETIRED_ANY,FIXC0,5038
+CPU_CLK_UNHALTED_CORE,FIXC1,11059
+CPU_CLK_UNHALTED_REF,FIXC2,11979
+L2_LINES_IN_ALL,PMC0,421
+L2_TRANS_L2_WB,PMC1,96
+TABLE,Region FreeNotOpt,Group 1 Metric,L3,10
+Metric,HWThread 3,
+Runtime (RDTSC) [s],5.612986e-07,
+Runtime unhalted [s],3.809972e-06,
+Clock [MHz],2679.7198,
+CPI,2.1951,
+L3 load bandwidth [MBytes/s],48002.9703,
+L3 load data volume [GBytes],2.694400e-05,
+L3 evict bandwidth [MBytes/s],10946.0455,
+L3 evict data volume [GBytes],6.144000e-06,
+L3 bandwidth [MBytes/s],58949.0157,
+L3 data volume [GBytes],3.308800e-05,
