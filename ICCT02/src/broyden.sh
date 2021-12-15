@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for N in 10 32
+for N in $1
 do
 	echo $N
  	echo "(3-2*x1)*x1-2*x2+1"

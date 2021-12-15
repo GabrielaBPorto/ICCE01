@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <sys/time.h>
+#include <likwid.h>
 
 /*  Retorna tempo em milisegundos
 
@@ -15,5 +16,11 @@
 */
 
 double timestamp(void);
+
+typedef char * string_t;
+
+string_t markerName(string_t baseName, int n);
+int isPot2(int n);
+void troca(double *a, double *b);
 
 #endif // __UTILS_H__

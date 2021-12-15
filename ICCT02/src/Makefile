@@ -1,7 +1,7 @@
-       PROG   = trab1
+       PROG   = principal
 
            CC = gcc # -std=c11
-         OBJS = utils.o newton.o
+         OBJS = utils.o newton.o newtonOpt.o
 
        LIKWID = /home/soft/likwid
  LIKWID_FLAGS = -I$(LIKWID)/include -DLIKWID_PERFMON 
@@ -15,9 +15,9 @@
 .PHONY: all debug clean limpa purge faxina
 
 %.o: %.c %.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 
-all: likwid
+all: likwid avx
 
 debug:            CFLAGS += -g -DDEBUG
 avx:              CFLAGS += $(AVX_FLAGS)

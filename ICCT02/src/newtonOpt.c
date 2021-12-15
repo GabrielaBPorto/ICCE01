@@ -1,4 +1,4 @@
-#include "newton.h"
+#include "newtonOpt.h"
 #include <matheval.h>
 #include <assert.h>
 #include <string.h>
@@ -17,7 +17,7 @@
 // 			argc: Quantidade de elementos que existem na chamada da execução de arquivo
 //			argc: Os elementos que existem na chamada de execução de arquivo
 // Retorna o ponteiro de arquivo de saída correto para impressão.
-FILE* trataSaida(int argc, char *argv[]){
+FILE* trataSaidaOpt(int argc, char *argv[]){
 	char outputName[TAM_BUFFER];
 	FILE *output;
 
@@ -45,7 +45,7 @@ FILE* trataSaida(int argc, char *argv[]){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void alocacaoVariaveis(int n){
+void alocacaoVariaveisOpt(int n){
 	resultados = calloc(n, sizeof(double));
 	resultadoJacobiana = calloc(n, sizeof(double));
 	derivadas = (void**)malloc(n * n * sizeof(void*));
@@ -65,7 +65,7 @@ void alocacaoVariaveis(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void leituraEquacoes(int n){
+void leituraEquacoesOpt(int n){
 	int length;
 	for (int i = 0; i < n; i++)
 	{
@@ -83,8 +83,8 @@ void leituraEquacoes(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void leituraVariaveis(int n){
-	leituraEquacoes(n);
+void leituraVariaveisOpt(int n){
+	leituraEquacoesOpt(n);
 	for (int i = 0; i < n; i++)
 	{
 		fscanf(input,"%lf", &helper);
@@ -99,7 +99,7 @@ void leituraVariaveis(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Retorna o tempo de execução que levou para fazer o cálculo para essa iteração
-double escreveDerivadasParciais (int n){
+double escreveDerivadasParciaisOpt (int n){
 	double tempoExec = timestamp();
 	for (int i = 0; i < n; i++)
 	{
@@ -126,7 +126,7 @@ double escreveDerivadasParciais (int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void liberacaoMemoriaUsada(int n){
+void liberacaoMemoriaUsadaOpt(int n){
 	free(derivadas);
 	free(jacobiana);
 	free(resultados);
@@ -143,7 +143,7 @@ void liberacaoMemoriaUsada(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Retorna o tempo de cálculo utilizando o método de newton
-double jacobianaMetodo(int n){
+double jacobianaMetodoOpt(int n){
 	double tempoExec = timestamp();	
 
 	for (int i = 0; i < n; i++)
@@ -164,7 +164,7 @@ double jacobianaMetodo(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Retorna o tempo de cálculo utilizando o método de newton
-double gaussPivotearParcial(int n){
+double gaussPivotearParcialOpt(int n){
 	double tempoExec = timestamp();
 
 	int i,j,k;
@@ -174,22 +174,22 @@ double gaussPivotearParcial(int n){
 			// Caso o elemento da diagonal for menor que os termos abaixo
             if(fabs(jacobiana[(i*n)+i])<fabs(jacobiana[(k*n)+i])){
                 //Troca as linhas
-				LIKWID_MARKER_START("TrocaLinhasTrab1");
-				trocaLinhas(n,i,k);
-				LIKWID_MARKER_STOP("TrocaLinhasTrab1");
+				LIKWID_MARKER_START("TrocaLinhasTrab2");
+				trocaLinhasOpt(n,i,k);
+				LIKWID_MARKER_STOP("TrocaLinhasTrab2");
             }
         }
 		
         //Realiza eliminação de gauss
-		LIKWID_MARKER_START("EliminacaoGaussTrab1");
-		if(eliminacaoGauss(n,i) == -1){
+		LIKWID_MARKER_START("EliminacaoGaussTrab2");
+		if(eliminacaoGaussOpt(n,i) == -1){
 			return -1;
 		}
-		LIKWID_MARKER_STOP("EliminacaoGaussTrab1");
+		LIKWID_MARKER_STOP("EliminacaoGaussTrab2");
     }
-	LIKWID_MARKER_START("EscreveParciaisTrab1");
-	calculaResultadoMatrizJacobiana(n);
-	LIKWID_MARKER_STOP("EscreveParciaisTrab1");
+	LIKWID_MARKER_START("EscreveParciaisTrab2");
+	calculaResultadoMatrizJacobianaOpt(n);
+	LIKWID_MARKER_STOP("EscreveParciaisTrab2");
 	return timestamp() - tempoExec;
 }
 
@@ -199,7 +199,7 @@ double gaussPivotearParcial(int n){
 // 			n: Tamanho do vetor
 //			i: Iteração 1
 // Não retorna nada
-double eliminacaoGauss(int n, int i){
+double eliminacaoGaussOpt(int n, int i){
 	double term;
 	for(int k=i+1;k<n;k++){
 		// Caso for 0 vai jogar para mensagem de erro
@@ -223,7 +223,7 @@ double eliminacaoGauss(int n, int i){
 //			i: Iteração 1
 //			k: Iteração 2
 // Não retorna nada
-void trocaLinhas(int n, int i, int k){
+void trocaLinhasOpt(int n, int i, int k){
 	for(int j=0;j<n;j++){                
 		troca(&jacobiana[(i*n)+j], &jacobiana[(k*n)+j]);
 	}
@@ -235,7 +235,7 @@ void trocaLinhas(int n, int i, int k){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void calculaResultadoMatrizJacobiana(int n){
+void calculaResultadoMatrizJacobianaOpt(int n){
 	int j;
 	for (int i = n-1; i >= 0; i--)
 	{
@@ -254,35 +254,35 @@ void calculaResultadoMatrizJacobiana(int n){
 // 			n: Tamanho do vetor
 //			tempos: Vetor que grava tempos por iteração de resposta
 // Retorna o tempo de cálculo utilizando o método de newton
-double newtonMethod(int n, double *tempos){
+double newtonMethodOpt(int n, double *tempos){
 	double tempoExec = timestamp();
 	int iter;
 
 	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
 	for (iter = 0; iter < maxIter; iter++)
 	{
-		impressaoResultados(n);
+		impressaoResultadosOpt(n);
 
-		LIKWID_MARKER_START("JacobianaTrab1");
-		tempos[2] = jacobianaMetodo(n);
-		LIKWID_MARKER_STOP("JacobianaTrab1");
+		LIKWID_MARKER_START("JacobianaTrab2");
+		tempos[2] = jacobianaMetodoOpt(n);
+		LIKWID_MARKER_STOP("JacobianaTrab2");
 
 		//Verificação de parada
-		if (max(resultadoEquacoes, n) < epsilon){
+		if (maxOpt(resultadoEquacoes, n) < epsilon){
 			return timestamp() - tempoExec;
 		}
 	
-		LIKWID_MARKER_START("PivoteamentoTrab1");
-		tempos[3] = gaussPivotearParcial(n);
-		LIKWID_MARKER_STOP("PivoteamentoTrab1");
+		LIKWID_MARKER_START("PivoteamentoTrab2");
+		tempos[3] = gaussPivotearParcialOpt(n);
+		LIKWID_MARKER_STOP("PivoteamentoTrab2");
 		if(tempos[3] == -1){
 			return -1;
 		}
 
-		calculoResultadoX(n);
+		calculoResultadoXOpt(n);
 
 		// Verificação de parada
-		if (max(resultadoJacobiana, n) < epsilon){
+		if (maxOpt(resultadoJacobiana, n) < epsilon){
 			return timestamp() - tempoExec;
 		}
 				
@@ -295,12 +295,12 @@ double newtonMethod(int n, double *tempos){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void calculoResultadoX(int n){
-	LIKWID_MARKER_START("ResultadoJacobianaTrab1");
+void calculoResultadoXOpt(int n){
+	LIKWID_MARKER_START("ResultadoJacobianaTrab2");
 	for(int i=0; i< n; i++){
 		resultados[i] -= resultadoJacobiana[i];
 	}
-	LIKWID_MARKER_STOP("ResultadoJacobianaTrab1");
+	LIKWID_MARKER_STOP("ResultadoJacobianaTrab2");
 }
 
 
@@ -309,7 +309,7 @@ void calculoResultadoX(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void impressaoResultados(int  n){
+void impressaoResultadosOpt(int  n){
 	fprintf(output,"#\n");
 	for (int i = 0; i < n; i++)
 	{
@@ -325,23 +325,23 @@ void impressaoResultados(int  n){
 // 			n: Tamanho do vetor.
 // Obs: Como estamos trabalhando com matrizes como vetores, podemos só passar o tamanho da matriz
 // Não retorna nada
-double max(double *vetor, int n){
+double maxOpt(double *vetor, int n){
 
-	LIKWID_MARKER_START("MaxTrab1");
+	LIKWID_MARKER_START("MaxTrab2");
 	double max = fabs(vetor[0]);
 	for(int i=0; i<n;i++){
 		if(fabs(max) < fabs(vetor[i])){
 			max = fabs(vetor[i]);
 		}
 	}
-	LIKWID_MARKER_STOP("MaxTrab1");
+	LIKWID_MARKER_STOP("MaxTrab2");
 	return max;
 }
 
-int trabalho1(FILE *input,FILE *output){
+int trabalho2(FILE *input,FILE *output){
 
 	LIKWID_MARKER_INIT;
-  	LIKWID_MARKER_START("StartNewtonTrab1");
+  	LIKWID_MARKER_START("StartNewtonTrab2");
 
 	// Declaração de variavel
 	int dim;
@@ -353,28 +353,28 @@ int trabalho1(FILE *input,FILE *output){
 	while (fscanf(input, "%d\n", &dim) != EOF)
 	{
 		fprintf(output,"%d\n", dim);
-		LIKWID_MARKER_START("AlocVariavelTrab1");
+		LIKWID_MARKER_START("AlocVariavelTrab2");
 		alocacaoVariaveis(dim);
-		LIKWID_MARKER_STOP("AlocVariavelTrab1");
+		LIKWID_MARKER_STOP("AlocVariavelTrab2");
 
-		LIKWID_MARKER_START("LeVariavelTrab1");
+		LIKWID_MARKER_START("LeVariavelTrab2");
 		leituraVariaveis(dim);
-		LIKWID_MARKER_STOP("LeVariavelTrab1");
+		LIKWID_MARKER_STOP("LeVariavelTrab2");
 
-		LIKWID_MARKER_START("EscreveParciaisTrab1");
+		LIKWID_MARKER_START("EscreveParciaisTrab2");
 		tempos[1] = escreveDerivadasParciais(dim);
-		LIKWID_MARKER_STOP("EscreveParciaisTrab1");
+		LIKWID_MARKER_STOP("EscreveParciaisTrab2");
 
-		LIKWID_MARKER_START("MetodoNewtonTrab1");
+		LIKWID_MARKER_START("MetodoNewtonTrab2");
 		tempos[0] = newtonMethod(dim, tempos);
 		if(tempos[0] == -1){
 			return -1;
 		}
-		LIKWID_MARKER_STOP("MetodoNewtonTrab1");
+		LIKWID_MARKER_STOP("MetodoNewtonTrab2");
 
-		LIKWID_MARKER_START("LiberaMemoriaTrab1");
+		LIKWID_MARKER_START("LiberaMemoriaTrab2");
 		liberacaoMemoriaUsada(dim);
-		LIKWID_MARKER_STOP("LiberaMemoriaTrab1");
+		LIKWID_MARKER_STOP("LiberaMemoriaTrab2");
 
 
 		//Printar os tempos
@@ -385,7 +385,7 @@ int trabalho1(FILE *input,FILE *output){
 		fprintf(output,"# Tempo SL: %.6lf \n", tempos[3]);
 		fprintf(output,"###########\n\n");
 	}
-	LIKWID_MARKER_STOP("StartNewtonTrab1");
+	LIKWID_MARKER_STOP("StartNewtonTrab2");
 	LIKWID_MARKER_CLOSE;
 
 	return 0;

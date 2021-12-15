@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "utils.h"
 #include <sys/time.h>
+#include <likwid.h>
 
 #define TAM_BUFFER 256
 
@@ -26,12 +27,11 @@ double newtonMethod(int n, double *tempos);
 double jacobianaMetodo(int n);
 void impressaoResultados(int  n);
 double gaussPivotearParcial(int n);
-void troca(double *a, double *b);
 double max(double *vetor, int n);
 void calculaResultadoMatrizJacobiana(int n);
 void trocaLinhas(int n, int i, int k);
 double eliminacaoGauss(int n, int i);
 void calculoResultadoX(int n);
-
+int trabalho1(FILE *input,FILE *output);
 
 #endif // __NEWTON_H__

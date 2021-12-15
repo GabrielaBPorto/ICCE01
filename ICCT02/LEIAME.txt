@@ -1,107 +1,23 @@
-Especificação
-O trabalho consiste em resolver vários sistemas não-lineares utilizando o Método de Newton.
-
-A biblioteca libmatheval deve ser utilizada para o cálculo da matriz Jacobiana e o sistema linear de cada iteração do método de Newton deve ser resolvido via Eliminação de Gauss com pivoteamento parcial.
-
-Os sistemas serão lidos pela Entrada Padrão. O formato de entrada dos dados consiste de diversos blocos separados por uma linha em branco. Cada bloco tem a dimensão do sistema na 1ª linha, e nas linhas restantes do bloco estão: (1) as expressões das funções não-lineares que compõem o sistema, sem espaços; (2) aproximação inicial; (3) tolerância epsilon para o(s) critério(s) de parada; (4) número máximo de iterações.
-
-Considere que as incógnitas do SNL são denominadas x1, x2, ..., xn.
-
-O programa deverá gerar como saída diversos blocos separados por uma linha em branco. Cada bloco tem a dimensão do sistema na 1ª linha, seguida do sistema de entrada, o caractere '#' e de todas as iterações obtidas pelo Método de Newton, separadas pelo caractere '#'. Para cada iteração, imprimir cada incógnita em uma linha.
-
-Além disso, ao final de cada bloco deve constar:
-
-O tempo de execução total do Método de Newton;
-O tempo para calcular todas as derivadas parciais usando a libmatheval;
-A soma dos tempos de execução de todas as computações de matrizes Jacobianas efetuadas.
-A soma dos tempos de execução de todas as resoluções de sistemas lineares efetuados pelo método.
-Portanto, cada bloco de resultados na saída deve ter o formato abaixo:
-
-<n>
-<expressão f1>
-...
-<expressão fn>
-#
-x1 = <x1 na iteração 0>
-...
-xn = <xn na iteração 0>
-#
-...
-#
-x1 = <x1 na última iteração>
-...
-xn = <xn na última iteração>
-###########
-# Tempo Total: <tempo total do Método de Newton>
-# Tempo Derivadas: <tempo gasto no cálculo das derivadas parciais>
-# Tempo Jacobiana: <tempo gasto na construção das Jacobianas>
-# Tempo SL: <tempo gasto na resolução dos sistemas lineares>
-###########
-
-Os tempos devem ser calculados em milisegundos, utilizando-se a função timestamp() especificada nos módulos utils.*, disponíveis em https://gitlab.c3sl.ufpr.br/nicolui/ci1164_2020-trab01.
-
-Ao desenvolver seu programa:
-
-Escolha uma estrutura de dados eficiente para representar as matrizes;
-Escolha um layout eficiente para as variáveis e termos independentes dos sistemas.
-
-Execução do Programa
-O pacote de software a ser construído deve gerar um executável chamado newtonSNL, que deve ser invocado da seguinte forma:
-
-./newtonSNL -o <arquivo_saida>
-
-Onde:
-
--o <arquivo_saida>: parâmetro opcional no qual arquivo_saida é o caminho completo para o arquivo que vai conter a solução. Caso este parâmetro não esteja especificado, os resultados devem ser enviados para a Saída Padrão (stdout).
-
-Código Modular
-Você deve deixar seu código modular, com funções e arquivos específicos para implementar cada parte do programa. O programa principal deve estar em um módulo separado dos demais, contendo apenas a função main().
-
-Todas funções devem "falhar graciosamente". Em caso de erro, o retorno das funções deve ser diferente de zero, e uma mensagem de erro deve ser impressa na saída de erros (stderr).
-
-As funções/código-fonte devem conter comentários adequados descrevendo cada função.
-
-A documentação do código deve conter:
-
-Nome e GRR dos autores (em cada código-fonte)
-A descrição de cada função e dos seus parâmetros
-A descrição das estruturas de dados
-Todos os possíveis códigos de erro que a função pode produzir, explicando o significado de cada um deles
-Explicações sobre o algoritmo que por ventura sejam necessárias para a compreensão do código
-
-Produto a ser entregue
-O trabalho deve ser desenvolvido por um grupo composto por no máximo DOIS alunos regularmente matriculados na disciplina. O grupo NÃO PODE SER ALTERADO na próxima parte do trabalho.
-
-Cada grupo deve entregar via MOODLE um pacote de software completo contendo os fontes em linguagem C . O pacote deve ser arquivado e compactado com zip ou tar, em um arquivo chamado login1.<ext>[1](se grupo com 1 membro) ou login1-login2.<ext> (se grupo com 2 membros), onde login1 e login2 são os logins (nos sistemas do DINF) dos alunos que compõem o grupo.
-
-O pacote deve ter a seguinte estrutura de diretório e arquivos:
-
-./login1-login2/: diretório principal
-./login1-login2/LEIAME: arquivo contendo descrição geral dos módulos e qualquer outro esclarecimento sobre o programa.
-./login1-login2/Makefile
-Note que a extração dos arquivos de login1-login2.zip deve criar o diretório login1-login2 contendo todos os arquivo acima. Os arquivos fonte também devem estar contidos no diretório, ou em algum sub-diretório, desde que o Makefile funcione.
-
-
-Makefile
-O arquivo Makefile deve possuir as regras necessárias para compilar os módulos individualmente e gerar o programa executável. As seguintes regras devem existir OBRIGATORIAMENTE:
-
-all: compila e produz um executável chamado newtonSNL no diretório login1-login2/;
-
-clean: remove todos os arquivos temporários e os arquivos gerados pela compilação do programa (*.o, executável, etc.).
-
-Critérios de Avaliação
-15 pts Qualidade da documentação
-10 pts Qualidade da modularização do código
-10 pts Entrada e saída: funcionamento do programa de acordo com a especificação no que tange execução, entrada e saída
-50 pts Funcionamento: corretude das respostas nos testes executados
-15 pts Eficiência das estruturas de dados utilizadas, desde que devidamente justificadas
-
-DEFESA: A defesa do trabalho será oral, e definirá a nota individual de cada membro da equipe, de acordo com seu conhecimento a respeito do trabalho.
-
-ATENÇÃO: A defesa será realizada online durante semana após a entrega dos trabalhos, em horários marcados com o professor.
-
-.
-
-Exemplo de Entrada e Saída
-Um exemplo de entrada para o programa e uma possível saída estão anexos a este enunciado.
-
+TODO LIST:
+- Marcadores AVX para o trab1
+- Arquivos para o trab2 [DONE]
+- Correção do bug -o [DONE]
+- Fazer arquivo para chamar os trab1 e 2 na mesma chamada (estilo ex. 03) [DONE]
+- Corrigir script para fazer gráfico por marcador
+- Finalização de marcadores no trab1 [DONE]
+- Definição dos marcadores no trab2 [DONE]
+- Otimizações:
+    - VARIAVEIS LOCAIS
+    - Ao invés das strings, alocar diretamente as funções (Leitura Equacoes)
+    - Alocação mt doida do professor (Alocacao variaveis)
+    - PADDING (alocacao variaveis)
+    - derivadasParciais escrever porque não adianta dar unroll
+    - liberar memória usando a alocação do professor (mata o loop)
+    - jacobiana unroll loop interno
+    - pensar sobre pivoteamentoGauss internet
+    - eliminacao de Gauss tirar o if e fazer for separados
+    - melhorar o for da troca de linhas
+    - pesquisar otimização pivoteamento (calculoResultadoMatrizJacobiana)
+    - jogar ifs para condição do loop (tempo e ver qual dos outros)
+    - super unroll do calcularesultadoX
+    - comparacao em pares no max 
