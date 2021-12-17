@@ -424,7 +424,7 @@ int trabalho2(FILE *input, FILE *output){
 			impressaoResultadosOpt(dim, output, resultadosOpt);
 
 			LIKWID_MARKER_START("MatrizJacobianaTrab2");
-			tempos[2] = timestamp();
+			tempoExec = timestamp();
 
 			// Metodo de jacobi
 			// Objetivo: Criar matriz jacobianaOpt para a resposta atual
@@ -445,7 +445,7 @@ int trabalho2(FILE *input, FILE *output){
 			}
 
 			// O tempo de cálculo utilizando o método de newton
-			tempos[2] = timestamp() - tempos[2];
+			tempos[2] += timestamp() - tempoExec;
 			
 			LIKWID_MARKER_STOP("MatrizJacobianaTrab2");
 
@@ -461,7 +461,7 @@ int trabalho2(FILE *input, FILE *output){
 			// Variaveis:
 			// 			n: Tamanho do vetor
 			// Retorna o tempo de cálculo utilizando o método de newton
-			tempos[3] = timestamp();
+			tempoExec = timestamp();
 
 			
 			for(i=0;i<dim;i++){
@@ -500,11 +500,8 @@ int trabalho2(FILE *input, FILE *output){
 			calculaResultadoMatrizJacobianaOpt(dim);
 			LIKWID_MARKER_STOP("ResultadoJacobianaTrab2");
 			
-			tempos[3] = timestamp() - tempos[3];
+			tempos[3] += timestamp() - tempoExec;
 			LIKWID_MARKER_STOP("PivoteamentoTrab2");
-			if(tempos[3] == -1){
-				return -1;
-			}
 
 			LIKWID_MARKER_START("ResultadoNewtonTrab2");
 			calculoResultadoXOpt(dim);

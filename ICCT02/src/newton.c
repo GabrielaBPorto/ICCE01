@@ -389,7 +389,7 @@ int trabalho1(FILE *input,FILE *output){
 				resultadoEquacoes[i] = evaluator_evaluate(eval, dim, (char **)variaveis, resultados);
 			}
 			// O tempo de cálculo utilizando o método de newton
-			tempos[2] = timestamp() - tempoExec;
+			tempos[2] += timestamp() - tempoExec;
 			
 			LIKWID_MARKER_STOP("MatrizJacobianaTrab1");
 
@@ -448,7 +448,7 @@ int trabalho1(FILE *input,FILE *output){
 			calculaResultadoMatrizJacobiana(dim);
 			LIKWID_MARKER_STOP("ResultadoJacobianaTrab1");
 			
-			tempos[3] = timestamp() - tempoExec;
+			tempos[3] += timestamp() - tempoExec;
 			LIKWID_MARKER_STOP("PivoteamentoTrab1");
 			if(tempos[3] == -1){
 				return -1;
