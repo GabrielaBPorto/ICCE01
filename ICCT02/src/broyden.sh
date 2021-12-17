@@ -13,5 +13,5 @@ do
 	do
 		echo -n "-1 "
 	done
- 	echo "\n0 20\n"
+ 	echo -e "\n0 20\n"
 done

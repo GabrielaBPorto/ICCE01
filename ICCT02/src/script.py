@@ -58,7 +58,7 @@ os.system(cmdRM)
 cmdMkDir = f"mkdir {diretorio}"
 os.system(cmdMkDir)
 
-cmdMake = f"make"
+cmdMake = f"make avx"
 print (cmdMake)
 os.system(cmdMake)
 
