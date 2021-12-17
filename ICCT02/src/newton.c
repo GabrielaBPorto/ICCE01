@@ -263,9 +263,9 @@ void calculaResultadoMatrizJacobiana(int n){
 // 	{
 // 		impressaoResultados(n);
 
-// 		LIKWID_MARKER_START("JacobianaTrab1");
+// 		LIKWID_MARKER_START("MatrizJacobianaTrab1");
 // 		tempos[2] = jacobianaMetodo(n);
-// 		LIKWID_MARKER_STOP("JacobianaTrab1");
+// 		LIKWID_MARKER_STOP("MatrizJacobianaTrab1");
 
 // 		//Verificação de parada
 // 		if (max(resultadoEquacoes, n) < epsilon){
@@ -344,8 +344,6 @@ int trabalho1(FILE *input,FILE *output){
 	void *eval;
 	double tempos[4], tempoExec;
 
-	printf("Tratou saida\n");
-
 	while (fscanf(input, "%d\n", &dim) != EOF)
 	{
 		fprintf(output,"%d\n", dim);
@@ -375,7 +373,7 @@ int trabalho1(FILE *input,FILE *output){
 		{
 			impressaoResultados(dim, output);
 
-			LIKWID_MARKER_START("JacobianaTrab1");
+			LIKWID_MARKER_START("MatrizJacobianaTrab1");
 			tempoExec = timestamp();	
 
 			// Metodo de jacobi
@@ -393,7 +391,7 @@ int trabalho1(FILE *input,FILE *output){
 			// O tempo de cálculo utilizando o método de newton
 			tempos[2] = timestamp() - tempoExec;
 			
-			LIKWID_MARKER_STOP("JacobianaTrab1");
+			LIKWID_MARKER_STOP("MatrizJacobianaTrab1");
 
 			//Verificação de parada
 			LIKWID_MARKER_START("MaxTrab1");
@@ -446,9 +444,9 @@ int trabalho1(FILE *input,FILE *output){
 				}
 				LIKWID_MARKER_STOP("EliminacaoGaussTrab1");
 			}
-			LIKWID_MARKER_START("EscreveParciaisTrab1");
+			LIKWID_MARKER_START("ResultadoJacobianaTrab1");
 			calculaResultadoMatrizJacobiana(dim);
-			LIKWID_MARKER_STOP("EscreveParciaisTrab1");
+			LIKWID_MARKER_STOP("ResultadoJacobianaTrab1");
 			
 			tempos[3] = timestamp() - tempoExec;
 			LIKWID_MARKER_STOP("PivoteamentoTrab1");
@@ -456,9 +454,9 @@ int trabalho1(FILE *input,FILE *output){
 				return -1;
 			}
 
-			LIKWID_MARKER_START("ResultadoJacobianaTrab1");
+			LIKWID_MARKER_START("ResultadoNewtonTrab1");
 			calculoResultadoX(dim);
-			LIKWID_MARKER_STOP("ResultadoJacobianaTrab1");
+			LIKWID_MARKER_STOP("ResultadoNewtonTrab1");
 
 			// Verificação de parada
 			LIKWID_MARKER_START("MaxTrab1");

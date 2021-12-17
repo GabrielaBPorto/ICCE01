@@ -45,13 +45,10 @@ FILE* trataSaidaOpt(int argc, char *argv[]){
 // Variaveis:
 // n: Tamanho do vetor
 // Não retorna nada
-void alocacaoVariaveisOpt(int n, double *resultadosOpt, double *resultadoJacobianaOpt, void **derivadas, double *jacobianaOpt, char ** variaveis, double *resultadoEquacoes){	
+void alocacaoVariaveisOpt(int n){	
 	resultadosOpt = calloc(n, sizeof(double));
-	for (int i; i < n; i++)
-	{
-		printf("%lf \n",resultadosOpt[i]);
-	}
 	resultadoJacobianaOpt = calloc(n, sizeof(double));
+	equacoes = (void **)malloc(n * sizeof(void*));
 	derivadas = (void**)malloc(n * n * sizeof(void*));
 	jacobianaOpt = calloc(n*n, sizeof(double));
 	variaveis = calloc(n, sizeof(char *));
@@ -69,7 +66,7 @@ void alocacaoVariaveisOpt(int n, double *resultadosOpt, double *resultadoJacobia
 // Variaveis:
 // n: Tamanho do vetor
 // Não retorna nada
-void leituraEquacoesOpt(int n, FILE *input, char equacoes[TAM_BUFFER][TAM_BUFFER]){
+void leituraEquacoesOpt(int n, FILE *input){
 	int length;
 	char temp[TAM_BUFFER];
 
@@ -79,7 +76,8 @@ void leituraEquacoesOpt(int n, FILE *input, char equacoes[TAM_BUFFER][TAM_BUFFER
 		length = strlen (temp);
 		if (length > 0 && temp[length - 1] == '\n')
 			temp[length - 1] = '\0';
-		memcpy(equacoes[i], temp, length);
+		equacoes[i] = evaluator_create(temp);
+		assert(equacoes[i]);
 	}
 	return;
 }
@@ -89,25 +87,20 @@ void leituraEquacoesOpt(int n, FILE *input, char equacoes[TAM_BUFFER][TAM_BUFFER
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void leituraVariaveisOpt(int n, FILE *input, double *epsilon, int *maxIter, char equacoes[TAM_BUFFER][TAM_BUFFER]){
-	char helper[TAM_BUFFER];
-	char *token, *ptr;
-
-	leituraEquacoesOpt(n, input, equacoes);
+void leituraVariaveisOpt(int n, FILE *input, double *epsilon, int *maxIter){
+	// char helper[TAM_BUFFER];
+	// char *token, *ptr;
+	double helper;
+	leituraEquacoesOpt(n, input);
 	
-	fgets(helper, TAM_BUFFER, input);
-	token = strtok(helper, " ");
+	// fgets(helper, TAM_BUFFER, input);
+	// token = strtok(helper, " ");
 
 	for (int i = 0; i < n; i++)
 	{
-		// printf("i is %d\n", i);
-		resultadosOpt[i] = 0.0;
-		// printf("%s \n", token);
-		// resultadosOpt[i] = strtod(token, &ptr);
-		// printf("resultado %d = %lf", i, resultadosOpt[i]);
-		// token = strtok(NULL, " ");
+		fscanf(input,"%lf", &helper);
+		resultadosOpt[i] = helper;
 	}
-	// printf("resultadosOpt foi\n");
 	fscanf(input,"%lf\n", epsilon);
 	fscanf(input,"%d\n", maxIter);
 }
@@ -117,23 +110,21 @@ void leituraVariaveisOpt(int n, FILE *input, double *epsilon, int *maxIter, char
 // Variaveis:
 // 			n: Tamanho do vetor
 // Retorna o tempo de execução que levou para fazer o cálculo para essa iteração
-double escreveDerivadasParciaisOpt (int n, FILE *output, char equacoes[TAM_BUFFER][TAM_BUFFER]){
+double escreveDerivadasParciaisOpt (int n, FILE *output){
 	void *eval;
 	double tempoExec = timestamp();
 	for (int i = 0; i < n; i++)
 	{
-		eval = evaluator_create(equacoes[i]);
-		assert(eval);
-		fprintf(output, "%s = 0\n", evaluator_get_string(eval));
+		fprintf(output, "%s = 0\n", evaluator_get_string(equacoes[i]));
 		for (int j = 0; j < n; j++)
 		{
-			char variavel[5];
+			char variavel[8];
 			sprintf(variavel, "x%d", j+1);
 			if (i == 0)
 			{
 				memcpy(variaveis[j], variavel, strlen (variavel));
 			}
-			derivadas[(i*n)+j] = evaluator_derivative(eval, variavel);
+			derivadas[(i*n)+j] = evaluator_derivative(equacoes[i], variavel);
 			assert(derivadas[(i*n)+j]);
 		}
 	}
@@ -155,6 +146,7 @@ void liberacaoMemoriaUsadaOpt(int n){
 		free(variaveis[i]);
 	}
 	free(variaveis);
+	free(equacoes);
 }
 
 // Metodo de jacobi
@@ -163,7 +155,7 @@ void liberacaoMemoriaUsadaOpt(int n){
 // 			n: Tamanho do vetor
 // Retorna o tempo de cálculo utilizando o método de newton
 double jacobianaMetodoOpt(int n, double *jacobianaOpt, void **derivadas, char **variaveis, 
-						  char **equacoes, double *resultadosOpt, double *resultadoEquacoes){
+						  double *resultadosOpt, double *resultadoEquacoes){
 	double tempoExec = timestamp();	
 	void *eval;
 
@@ -173,9 +165,7 @@ double jacobianaMetodoOpt(int n, double *jacobianaOpt, void **derivadas, char **
 		{
 			jacobianaOpt[(i*n)+j] = evaluator_evaluate(derivadas[(i*n)+j], n, (char **)variaveis, resultadosOpt);
 		}
-		eval = evaluator_create(equacoes[i]);
-		assert(eval);
-		resultadoEquacoes[i] = evaluator_evaluate(eval, n, (char **)variaveis, resultadosOpt);
+		resultadoEquacoes[i] = evaluator_evaluate(equacoes[i], n, (char **)variaveis, resultadosOpt);
 	}
 	return timestamp() - tempoExec;
 }
@@ -245,8 +235,15 @@ double eliminacaoGaussOpt(int n, int i, double *jacobianaOpt, double *resultadoE
 //			k: Iteração 2
 // Não retorna nada
 void trocaLinhasOpt(int n, int i, int k){
-	for(int j=0;j<n;j++){                
+	for(int j=0;j<n-n%4;j+=4){                
 		troca(&jacobianaOpt[(i*n)+j], &jacobianaOpt[(k*n)+j]);
+		troca(&jacobianaOpt[(i*n)+j+1], &jacobianaOpt[(k*n)+j+1]);
+		troca(&jacobianaOpt[(i*n)+j+2], &jacobianaOpt[(k*n)+j+2]);
+		troca(&jacobianaOpt[(i*n)+j+3], &jacobianaOpt[(k*n)+j+3]);
+	}
+	for (int j=n-n%4; j < n; j++)
+	{
+		troca(&jacobianaOpt[(i*n)+j], &jacobianaOpt[(k*n)+j]);;
 	}
 	troca(&resultadoEquacoes[i], &resultadoEquacoes[k]);
 }
@@ -258,7 +255,25 @@ void trocaLinhasOpt(int n, int i, int k){
 // Não retorna nada
 void calculaResultadoMatrizJacobianaOpt(int n){
 	int j;
-	for (int i = n-1; i >= 0; i--)
+	for (int i = n-1; i >= n%4; i-=4)
+	{
+		resultadoJacobianaOpt[i] = resultadoEquacoes[i];
+		resultadoJacobianaOpt[i-1] = resultadoEquacoes[i-1];
+		resultadoJacobianaOpt[i-2] = resultadoEquacoes[i-2];
+		resultadoJacobianaOpt[i-3] = resultadoEquacoes[i-3];
+		for (j = i +1; j < n; j++)
+		{
+			resultadoJacobianaOpt[i] = resultadoJacobianaOpt[i] - jacobianaOpt[(i*n)+j] * resultadoJacobianaOpt[j];
+			resultadoJacobianaOpt[i-1] = resultadoJacobianaOpt[i-1] - jacobianaOpt[((i-1)*n)+j] * resultadoJacobianaOpt[j];
+			resultadoJacobianaOpt[i-2] = resultadoJacobianaOpt[i-1] - jacobianaOpt[((i-2)*n)+j] * resultadoJacobianaOpt[j];
+			resultadoJacobianaOpt[i-3] = resultadoJacobianaOpt[i-1] - jacobianaOpt[((i-3)*n)+j] * resultadoJacobianaOpt[j];
+		}
+		resultadoJacobianaOpt[i] = resultadoJacobianaOpt[i] / jacobianaOpt[(i*n)+i];
+		resultadoJacobianaOpt[i-1] = resultadoJacobianaOpt[i-1] / jacobianaOpt[((i-1)*n)+(i-1)];
+		resultadoJacobianaOpt[i-2] = resultadoJacobianaOpt[i-2] / jacobianaOpt[((i-2)*n)+(i-2)];
+		resultadoJacobianaOpt[i-3] = resultadoJacobianaOpt[i-3] / jacobianaOpt[((i-3)*n)+(i-3)];
+	}
+	for (int i = (n%4)-1; i >= 0; i --)
 	{
 		resultadoJacobianaOpt[i] = resultadoEquacoes[i];
 		for (j = i +1; j < n; j++)
@@ -284,9 +299,9 @@ void calculaResultadoMatrizJacobianaOpt(int n){
 // 	{
 // 		impressaoResultadosOpt(n, output);
 
-// 		LIKWID_MARKER_START("JacobianaTrab2");
+// 		LIKWID_MARKER_START("MatrizJacobianaTrab2");
 // 		tempos[2] = jacobianaMetodoOpt(n);
-// 		LIKWID_MARKER_STOP("JacobianaTrab2");
+// 		LIKWID_MARKER_STOP("MatrizJacobianaTrab2");
 
 // 		//Verificação de parada
 // 		if (maxOpt(resultadoEquacoes, n) < epsilon){
@@ -318,11 +333,16 @@ void calculaResultadoMatrizJacobianaOpt(int n){
 // 			n: Tamanho do vetor
 // Não retorna nada
 void calculoResultadoXOpt(int n){
-	LIKWID_MARKER_START("ResultadoJacobianaTrab2");
-	for(int i=0; i< n; i++){
+	for(int i=0; i< n-n%4; i+=4){
+		resultadosOpt[i] -= resultadoJacobianaOpt[i];
+		resultadosOpt[i+1] -= resultadoJacobianaOpt[i+1];
+		resultadosOpt[i+2] -= resultadoJacobianaOpt[i+2];
+		resultadosOpt[i+3] -= resultadoJacobianaOpt[i+3];
+	}
+	for (int i = n-n%4; i < n; i++)
+	{
 		resultadosOpt[i] -= resultadoJacobianaOpt[i];
 	}
-	LIKWID_MARKER_STOP("ResultadoJacobianaTrab2");
 }
 
 
@@ -348,8 +368,8 @@ void impressaoResultadosOpt(int  n, FILE *output, double *resultadosOpt){
 // Obs: Como estamos trabalhando com matrizes como vetores, podemos só passar o tamanho da matriz
 // Não retorna nada
 double maxOpt(double *vetor, int n){
-
 	LIKWID_MARKER_START("MaxTrab2");
+
 	double max = fabs(vetor[0]);
 	for(int i=0; i<n;i++){
 		if(fabs(max) < fabs(vetor[i])){
@@ -363,7 +383,7 @@ double maxOpt(double *vetor, int n){
 int trabalho2(FILE *input, FILE *output){
 
 	double maxEval, epsilon;
-	char equacoes[TAM_BUFFER][TAM_BUFFER];
+	
 	int maxIter;
 
 	LIKWID_MARKER_INIT;
@@ -374,74 +394,64 @@ int trabalho2(FILE *input, FILE *output){
 	void *eval;
 	double tempos[4], tempoExec;
 
-	// printf("Tratou saida2\n");
-
 	while (fscanf(input, "%d\n", &dim) != EOF)
 	{
 		fprintf(output,"%d\n", dim);
+
 		LIKWID_MARKER_START("AlocVariavelTrab2");
 		//Alocação de memória
-		resultadosOpt = calloc(dim, sizeof(double));
-		// for (int i=0; i < dim; i++)
-		// {
-		// 	printf("%lf \n",resultadosOpt[i]);
-		// }
-		resultadoJacobianaOpt = calloc(dim, sizeof(double));
-		derivadas = (void**)malloc(dim * dim * sizeof(void*));
-		jacobianaOpt = calloc(dim*dim, sizeof(double));
-		variaveis = calloc(dim, sizeof(char *));
-		resultadoEquacoes = calloc(dim, sizeof(double));
-
-		for (int i = 0; i < dim; i++){
-			variaveis[i] = calloc(8, sizeof(char));
-		}
+		alocacaoVariaveisOpt(dim);
 		LIKWID_MARKER_STOP("AlocVariavelTrab2");
 
 		LIKWID_MARKER_START("LeVariavelTrab2");
-		leituraVariaveisOpt(dim, input, &epsilon, &maxIter, equacoes);
+		leituraVariaveisOpt(dim, input, &epsilon, &maxIter);
 		LIKWID_MARKER_STOP("LeVariavelTrab2");
 
 		LIKWID_MARKER_START("EscreveParciaisTrab2");
-		tempos[1] = escreveDerivadasParciaisOpt(dim, output, equacoes);
+		tempos[1] = escreveDerivadasParciaisOpt(dim, output);
 		LIKWID_MARKER_STOP("EscreveParciaisTrab2");
 
 		LIKWID_MARKER_START("MetodoNewtonTrab2");
 
 		// Método de Newton
 		// Objetivo: Devolver uma solução refinada para o Sistema linear passado
-		tempos[0] = timestamp();
+		tempoExec = timestamp();
 
 		//Loop epsilon < max resultadoJacobianaOpt, epsilon < max F(x) , iter < maxIter
 		for (iter = 0; iter < maxIter; iter++)
 		{
 			impressaoResultadosOpt(dim, output, resultadosOpt);
 
-			LIKWID_MARKER_START("JacobianaTrab2");
+			LIKWID_MARKER_START("MatrizJacobianaTrab2");
 			tempos[2] = timestamp();
 
 			// Metodo de jacobi
 			// Objetivo: Criar matriz jacobianaOpt para a resposta atual
 			for (i = 0; i < dim; i++)
 			{	
-				for (j = 0; j < dim; j++)
+				for (int j = 0; j < dim-dim%4; j+=4)
+				{
+					jacobianaOpt[(i*dim)+j] = evaluator_evaluate(derivadas[(i*dim)+j], dim, (char **)variaveis, resultadosOpt);
+					jacobianaOpt[(i*dim)+j+1] = evaluator_evaluate(derivadas[(i*dim)+j+1], dim, (char **)variaveis, resultadosOpt);
+					jacobianaOpt[(i*dim)+j+2] = evaluator_evaluate(derivadas[(i*dim)+j+2], dim, (char **)variaveis, resultadosOpt);
+					jacobianaOpt[(i*dim)+j+3] = evaluator_evaluate(derivadas[(i*dim)+j+3], dim, (char **)variaveis, resultadosOpt);
+				}
+				for (int j = dim-dim%4; j < dim; j++)
 				{
 					jacobianaOpt[(i*dim)+j] = evaluator_evaluate(derivadas[(i*dim)+j], dim, (char **)variaveis, resultadosOpt);
 				}
-				eval = evaluator_create(equacoes[i]);
-				assert(eval);
-				resultadoEquacoes[i] = evaluator_evaluate(eval, dim, (char **)variaveis, resultadosOpt);
+				resultadoEquacoes[i] = evaluator_evaluate(equacoes[i], dim, (char **)variaveis, resultadosOpt);
 			}
+
 			// O tempo de cálculo utilizando o método de newton
 			tempos[2] = timestamp() - tempos[2];
 			
-			LIKWID_MARKER_STOP("JacobianaTrab2");
+			LIKWID_MARKER_STOP("MatrizJacobianaTrab2");
 
 			//Verificação de parada
-			LIKWID_MARKER_START("MaxTrab2");
 			if (maxOpt(resultadoEquacoes, dim) < epsilon){
-				tempos[0] = timestamp() - tempos[0];
+				tempos[0] = timestamp() - tempoExec;
 			}
-			LIKWID_MARKER_STOP("MaxTrab2");
 		
 			LIKWID_MARKER_START("PivoteamentoTrab2");
 
@@ -464,32 +474,30 @@ int trabalho2(FILE *input, FILE *output){
 						LIKWID_MARKER_STOP("TrocaLinhasTrab2");
 					}
 				}
-				
 				//Realiza eliminação de gauss
 				LIKWID_MARKER_START("EliminacaoGaussTrab2");
 				// Eliminação de Gauss
 				// Objetivo: Faz a eliminação de Gauss
-				// Variaveis:
-				// 			n: Tamanho do vetor
-				//			i: Iteração 1
 				for(k=i+1;k<dim;k++){
-					// Caso for 0 vai jogar para mensagem de erro
-					if(jacobianaOpt[(i*dim)+i] != 0){
-						term= jacobianaOpt[(k*dim)+i]/ jacobianaOpt[(i*dim)+i];
-						for( j=0;j<dim;j++){
-							jacobianaOpt[(k*dim)+j]=jacobianaOpt[(k*dim)+j]-term*jacobianaOpt[(i*dim)+j];
-						}
-						resultadoEquacoes[k] = resultadoEquacoes[k] - term * resultadoEquacoes[i];				
+					term= jacobianaOpt[(k*dim)+i]/ jacobianaOpt[(i*dim)+i];
+					for( j=0;j<dim-dim%4;j+=4){
+						jacobianaOpt[(k*dim)+j]=jacobianaOpt[(k*dim)+j]-term*jacobianaOpt[(i*dim)+j];
+						jacobianaOpt[(k*dim)+j+1]=jacobianaOpt[(k*dim)+j+1]-term*jacobianaOpt[(i*dim)+j+1];
+						jacobianaOpt[(k*dim)+j+2]=jacobianaOpt[(k*dim)+j+2]-term*jacobianaOpt[(i*dim)+j+2];
+						jacobianaOpt[(k*dim)+j+3]=jacobianaOpt[(k*dim)+j+3]-term*jacobianaOpt[(i*dim)+j+3];
 					}
-					else{
-						return -1;		
+					for (j = dim-dim%4; j < dim; j++)
+					{
+						jacobianaOpt[(k*dim)+j]=jacobianaOpt[(k*dim)+j]-term*jacobianaOpt[(i*dim)+j];
 					}
+					resultadoEquacoes[k] = resultadoEquacoes[k] - term * resultadoEquacoes[i];				
 				}
 				LIKWID_MARKER_STOP("EliminacaoGaussTrab2");
 			}
-			LIKWID_MARKER_START("EscreveParciaisTrab2");
+
+			LIKWID_MARKER_START("ResultadoJacobianaTrab2");
 			calculaResultadoMatrizJacobianaOpt(dim);
-			LIKWID_MARKER_STOP("EscreveParciaisTrab2");
+			LIKWID_MARKER_STOP("ResultadoJacobianaTrab2");
 			
 			tempos[3] = timestamp() - tempos[3];
 			LIKWID_MARKER_STOP("PivoteamentoTrab2");
@@ -497,17 +505,14 @@ int trabalho2(FILE *input, FILE *output){
 				return -1;
 			}
 
-			LIKWID_MARKER_START("ResultadoJacobianaTrab2");
+			LIKWID_MARKER_START("ResultadoNewtonTrab2");
 			calculoResultadoXOpt(dim);
-			LIKWID_MARKER_STOP("ResultadoJacobianaTrab2");
+			LIKWID_MARKER_STOP("ResultadoNewtonTrab2");
 
 			// Verificação de parada
-			LIKWID_MARKER_START("MaxTrab2");
 			if (maxOpt(resultadoJacobianaOpt,dim) < epsilon){
 				return timestamp() - tempoExec;
-			}
-			LIKWID_MARKER_STOP("MaxTrab2");
-					
+			}					
 		}
 		// Finalização metodo de newton
 		tempos[0] =  timestamp() - tempoExec;

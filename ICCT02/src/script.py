@@ -12,8 +12,8 @@ diretorio='./results'
 def getGroupTable(group: str, size: int, version: str, columns: list = None) -> pd.DataFrame:
     # Executa likwid no terminal
     if(version == 'opt'):
-        cmd = f"likwid-perfctr -C 3 -g { group } -o { diretorio }/{ size }.{ group }Opt.csv -f -m ./principalOpt  { diretorio }/sistemas_{ size }.res"    
-        file_name = f"{diretorio}/{ size }.{ group}Opt.csv"
+        cmd = f"likwid-perfctr -C 3 -g { group } -o { diretorio }/{ size }.{ group }.Opt.csv -f -m ./principalOpt  { diretorio }/sistemas_{ size }.res"    
+        file_name = f"{diretorio}/{ size }.{ group}.Opt.csv"
     
     else:
         cmd = f"likwid-perfctr -C 3 -g { group } -o { diretorio }/{ size }.{ group }.csv -f -m ./principal  { diretorio }/sistemas_{ size }.res"
@@ -70,8 +70,8 @@ print (cmdMake)
 os.system(cmdMake)
 
 # %%
-markers = ['StartNewton', 'AlocVariavel', 'LeVariavel', 'EscreveParciais', 'MetodoNewton', 'Jacobiana', 'Max', 'Pivoteamento', 'EliminacaoGauss', 'ResultadoJacobiana', 'LiberaMemoria']
-testColumns = ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count']+['L3 bandwidth [MBytes/s]']+['DP [MFLOP/s]', 'AVX DP [MFLOP/s]']
+markers = ['StartNewton', 'AlocVariavel', 'LeVariavel', 'EscreveParciais', 'MetodoNewton', 'MatrizJacobiana', 'Max', 'Pivoteamento', 'EliminacaoGauss', 'ResultadoJacobiana', 'LiberaMemoria', 'ResultadoNewton']
+testColumns = ['L2 miss ratio', 'Runtime (RDTSC) [s]','call count']+['L3 bandwidth [MBytes/s]']+['DP [MFLOP/s]', 'AVX DP [MFLOP/s]', 'AVG TIME']
 dfFinal = pd.DataFrame(columns = testColumns,dtype=np.float64)
 for size in expected_sizes:
     cmdEntrada = f"./broyden.sh {size} > {diretorio}/sistemas_{size}.res"
@@ -91,15 +91,14 @@ dfFinal.to_csv(f"{diretorio}/tabelaFinal.csv")
 for marker in markers:
     dfMarker = dfFinal.loc[dfFinal['region'].str.contains(marker)]
     for col in testColumns:
-        if(col == "call count"):
+        if(col == "call count" or col == 'Runtime (RDTSC) [s]'):
             continue
         dfMarker.loc[:,col].apply(lambda x :float(x))
         try:
             path = os.path.join(f'{diretorio}/',col.replace('/','p').replace(' ','_')+f'_{ marker }'+'.png')
             plt.figure(figsize=(14, 7))
             g = sns.lineplot(data =dfMarker, x='n_size', y =col, hue='region')
-        # g.legend_.remove()
-            if (col == "Runtime (RDTSC) [s]"):
+            if (col == "AVG TIME"):
                 g.set_yscale('log')
             g.figure.savefig(path)            
             plt.close()

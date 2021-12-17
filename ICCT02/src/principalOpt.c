@@ -18,9 +18,8 @@ int main(int argc, char *argv[])
     FILE *f_out = stdout;
     
     f_out = fopen(markerName("resultadoOpt_", n), "w+");
-    int variavel = trabalho2(f_in, f_out);
+    trabalho2(f_in, f_out);
     fclose(f_out);
     fclose(f_in);
-    printf("Finalizado trab 2, %d\n", variavel);
     return 0;
 }

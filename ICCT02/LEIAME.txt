@@ -3,23 +3,23 @@ TODO LIST:
 - Arquivos para o trab2 [DONE]
 - Correção do bug -o [DONE]
 - Fazer arquivo para chamar os trab1 e 2 na mesma chamada (estilo ex. 03) [DONE]
-- Corrigir script para fazer gráfico por marcador 
+- Corrigir script para fazer gráfico por marcador [DONE]
 - Finalização de marcadores no trab1 [DONE]
 - Definição dos marcadores no trab2 [DONE]
 - Otimizações:
-    - VARIAVEIS LOCAIS [DONE]
-    - Ao invés das strings, alocar diretamente as funções (Leitura Equacoes)
+    - VARIAVEIS LOCAIS [Eeeeeh]
+    - Ao invés das strings, alocar diretamente as funções (Leitura Equacoes) [DONE]
     - Alocação mt doida do professor (Alocacao variaveis)
     - PADDING (alocacao variaveis)
     - derivadasParciais escrever porque não adianta dar unroll
     - liberar memória usando a alocação do professor (mata o loop)
-    - jacobiana unroll loop interno
+    - jacobiana unroll loop interno [DONE]
     - pensar sobre pivoteamentoGauss internet
-    - eliminacao de Gauss tirar o if e fazer for separados
-    - melhorar o for da troca de linhas
-    - pesquisar otimização pivoteamento (calculoResultadoMatrizJacobiana)
+    - eliminacao de Gauss tirar o if e fazer for separados [DONE]
+    - melhorar o for da troca de linhas [DONE]
+    - pesquisar otimização pivoteamento (calculoResultadoMatrizJacobiana) [DONE]
     - jogar ifs para condição do loop (tempo e ver qual dos outros)
-    - super unroll do calcularesultadoX
+    - super unroll do calcularesultadoX [DONE]
     - comparacao em pares no max 
 
 
