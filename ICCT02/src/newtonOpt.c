@@ -65,7 +65,7 @@ void alocacaoVariaveisOpt(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void leituraEquacoesOpt(int n){
+void leituraEquacoesOpt(int n, FILE *input){
 	int length;
 	for (int i = 0; i < n; i++)
 	{
@@ -83,8 +83,8 @@ void leituraEquacoesOpt(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void leituraVariaveisOpt(int n){
-	leituraEquacoesOpt(n);
+void leituraVariaveisOpt(int n, FILE *input){
+	leituraEquacoesOpt(n, input);
 	for (int i = 0; i < n; i++)
 	{
 		fscanf(input,"%lf", &helper);
@@ -99,7 +99,7 @@ void leituraVariaveisOpt(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Retorna o tempo de execução que levou para fazer o cálculo para essa iteração
-double escreveDerivadasParciaisOpt (int n){
+double escreveDerivadasParciaisOpt (int n, FILE *output){
 	double tempoExec = timestamp();
 	for (int i = 0; i < n; i++)
 	{
@@ -254,41 +254,41 @@ void calculaResultadoMatrizJacobianaOpt(int n){
 // 			n: Tamanho do vetor
 //			tempos: Vetor que grava tempos por iteração de resposta
 // Retorna o tempo de cálculo utilizando o método de newton
-double newtonMethodOpt(int n, double *tempos){
-	double tempoExec = timestamp();
-	int iter;
+// double newtonMethodOpt(int n, double *tempos){
+// 	double tempoExec = timestamp();
+// 	int iter;
 
-	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
-	for (iter = 0; iter < maxIter; iter++)
-	{
-		impressaoResultadosOpt(n);
+// 	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
+// 	for (iter = 0; iter < maxIter; iter++)
+// 	{
+// 		impressaoResultadosOpt(n, output);
 
-		LIKWID_MARKER_START("JacobianaTrab2");
-		tempos[2] = jacobianaMetodoOpt(n);
-		LIKWID_MARKER_STOP("JacobianaTrab2");
+// 		LIKWID_MARKER_START("JacobianaTrab2");
+// 		tempos[2] = jacobianaMetodoOpt(n);
+// 		LIKWID_MARKER_STOP("JacobianaTrab2");
 
-		//Verificação de parada
-		if (maxOpt(resultadoEquacoes, n) < epsilon){
-			return timestamp() - tempoExec;
-		}
+// 		//Verificação de parada
+// 		if (maxOpt(resultadoEquacoes, n) < epsilon){
+// 			return timestamp() - tempoExec;
+// 		}
 	
-		LIKWID_MARKER_START("PivoteamentoTrab2");
-		tempos[3] = gaussPivotearParcialOpt(n);
-		LIKWID_MARKER_STOP("PivoteamentoTrab2");
-		if(tempos[3] == -1){
-			return -1;
-		}
+// 		LIKWID_MARKER_START("PivoteamentoTrab2");
+// 		tempos[3] = gaussPivotearParcialOpt(n);
+// 		LIKWID_MARKER_STOP("PivoteamentoTrab2");
+// 		if(tempos[3] == -1){
+// 			return -1;
+// 		}
 
-		calculoResultadoXOpt(n);
+// 		calculoResultadoXOpt(n);
 
-		// Verificação de parada
-		if (maxOpt(resultadoJacobiana, n) < epsilon){
-			return timestamp() - tempoExec;
-		}
+// 		// Verificação de parada
+// 		if (maxOpt(resultadoJacobiana, n) < epsilon){
+// 			return timestamp() - tempoExec;
+// 		}
 				
-	}
-	return timestamp() - tempoExec;
-}
+// 	}
+// 	return timestamp() - tempoExec;
+// }
 
 // Calcula resultado
 // Objetivo: Função que calcula resultado à partir dos resultados do vetor de jacobiano
@@ -309,7 +309,7 @@ void calculoResultadoXOpt(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void impressaoResultadosOpt(int  n){
+void impressaoResultadosOpt(int  n, FILE *output){
 	fprintf(output,"#\n");
 	for (int i = 0; i < n; i++)
 	{
@@ -338,15 +338,15 @@ double maxOpt(double *vetor, int n){
 	return max;
 }
 
-int trabalho2(FILE *input,FILE *output){
+int trabalho2(FILE *input, FILE *output){
 
 	LIKWID_MARKER_INIT;
   	LIKWID_MARKER_START("StartNewtonTrab2");
 
 	// Declaração de variavel
-	int dim;
+	int dim, i, j,k, iter, term;
 	void *eval;
-	double tempos[4];
+	double tempos[4], tempoExec;
 
 	printf("Tratou saida\n");
 
@@ -358,22 +358,126 @@ int trabalho2(FILE *input,FILE *output){
 		LIKWID_MARKER_STOP("AlocVariavelTrab2");
 
 		LIKWID_MARKER_START("LeVariavelTrab2");
-		leituraVariaveis(dim);
+		leituraVariaveisOpt(dim, input);
 		LIKWID_MARKER_STOP("LeVariavelTrab2");
 
 		LIKWID_MARKER_START("EscreveParciaisTrab2");
-		tempos[1] = escreveDerivadasParciais(dim);
+		tempos[1] = escreveDerivadasParciaisOpt(dim, output);
 		LIKWID_MARKER_STOP("EscreveParciaisTrab2");
 
 		LIKWID_MARKER_START("MetodoNewtonTrab2");
-		tempos[0] = newtonMethod(dim, tempos);
+
+		// Método de Newton
+		// Objetivo: Devolver uma solução refinada para o Sistema linear passado
+		tempoExec = timestamp();
+
+		//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
+		for (iter = 0; iter < maxIter; iter++)
+		{
+			impressaoResultadosOpt(dim, output);
+
+			LIKWID_MARKER_START("JacobianaTrab2");
+			tempoExec = timestamp();	
+
+			// Metodo de jacobi
+			// Objetivo: Criar matriz jacobiana para a resposta atual
+			for (i = 0; i < dim; i++)
+			{	
+				for (j = 0; j < dim; j++)
+				{
+					jacobiana[(i*dim)+j] = evaluator_evaluate(derivadas[(i*dim)+j], dim, (char **)variaveis, resultados);
+				}
+				eval = evaluator_create(equacoes[i]);
+				assert(eval);
+				resultadoEquacoes[i] = evaluator_evaluate(eval, dim, (char **)variaveis, resultados);
+			}
+			// O tempo de cálculo utilizando o método de newton
+			tempos[2] = timestamp() - tempoExec;
+			
+			LIKWID_MARKER_STOP("JacobianaTrab2");
+
+			//Verificação de parada
+			LIKWID_MARKER_START("MaxTrab2");
+			if (maxOpt(resultadoEquacoes, dim) < epsilon){
+				tempos[0] = timestamp() - tempoExec;
+			}
+			LIKWID_MARKER_STOP("MaxTrab2");
+		
+			LIKWID_MARKER_START("PivoteamentoTrab2");
+
+			// Pivoteamento parcial de Gauss
+			// Objetivo: Aplicar Gauss com Pivoteamento Parcial para refinar a resposta
+			// Variaveis:
+			// 			n: Tamanho do vetor
+			// Retorna o tempo de cálculo utilizando o método de newton
+			tempoExec = timestamp();
+
+			
+			for(i=0;i<dim;i++){
+				// Pivoteamento parcial
+				for(k=i+1;k<dim;k++){
+					// Caso o elemento da diagonal for menor que os termos abaixo
+					if(fabs(jacobiana[(i*dim)+i])<fabs(jacobiana[(k*dim)+i])){
+						//Troca as linhas
+						LIKWID_MARKER_START("TrocaLinhasTrab2");
+						trocaLinhasOpt(dim,i,k);
+						LIKWID_MARKER_STOP("TrocaLinhasTrab2");
+					}
+				}
+				
+				//Realiza eliminação de gauss
+				LIKWID_MARKER_START("EliminacaoGaussTrab2");
+				// Eliminação de Gauss
+				// Objetivo: Faz a eliminação de Gauss
+				// Variaveis:
+				// 			n: Tamanho do vetor
+				//			i: Iteração 1
+				for(k=i+1;k<dim;k++){
+					// Caso for 0 vai jogar para mensagem de erro
+					if(jacobiana[(i*dim)+i] != 0){
+						term= jacobiana[(k*dim)+i]/ jacobiana[(i*dim)+i];
+						for( j=0;j<dim;j++){
+							jacobiana[(k*dim)+j]=jacobiana[(k*dim)+j]-term*jacobiana[(i*dim)+j];
+						}
+						resultadoEquacoes[k] = resultadoEquacoes[k] - term * resultadoEquacoes[i];				
+					}
+					else{
+						return -1;		
+					}
+				}
+				LIKWID_MARKER_STOP("EliminacaoGaussTrab2");
+			}
+			LIKWID_MARKER_START("EscreveParciaisTrab2");
+			calculaResultadoMatrizJacobianaOpt(dim);
+			LIKWID_MARKER_STOP("EscreveParciaisTrab2");
+			
+			tempos[3] = timestamp() - tempoExec;
+			LIKWID_MARKER_STOP("PivoteamentoTrab2");
+			if(tempos[3] == -1){
+				return -1;
+			}
+
+			LIKWID_MARKER_START("ResultadoJacobianaTrab2");
+			calculoResultadoXOpt(dim);
+			LIKWID_MARKER_STOP("ResultadoJacobianaTrab2");
+
+			// Verificação de parada
+			LIKWID_MARKER_START("MaxTrab2");
+			if (maxOpt(resultadoJacobiana,dim) < epsilon){
+				return timestamp() - tempoExec;
+			}
+			LIKWID_MARKER_STOP("MaxTrab2");
+					
+		}
+		// Finalização metodo de newton
+		tempos[0] =  timestamp() - tempoExec;
 		if(tempos[0] == -1){
 			return -1;
 		}
 		LIKWID_MARKER_STOP("MetodoNewtonTrab2");
 
 		LIKWID_MARKER_START("LiberaMemoriaTrab2");
-		liberacaoMemoriaUsada(dim);
+		liberacaoMemoriaUsadaOpt(dim);
 		LIKWID_MARKER_STOP("LiberaMemoriaTrab2");
 
 
@@ -387,6 +491,4 @@ int trabalho2(FILE *input,FILE *output){
 	}
 	LIKWID_MARKER_STOP("StartNewtonTrab2");
 	LIKWID_MARKER_CLOSE;
-
-	return 0;
 }

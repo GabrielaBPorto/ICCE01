@@ -16,14 +16,14 @@ int main(int argc, char *argv[])
     fscanf(f_in, "%d", &n);
     rewind(f_in);
 
-    FILE *f_out;
+    FILE *f_out = stdout;
 
-    f_out = fopen(markerName("resultado_", n), "w");
+    f_out = fopen(markerName("resultado_", n), "w+");
     trabalho1(f_in, f_out);
     fclose(f_out);
     rewind(f_in);
 
-    f_out = fopen(markerName("resultadoOpt_", n), "w");
+    f_out = fopen(markerName("resultadoOpt_", n), "w+");
     trabalho2(f_in, f_out);
     fclose(f_out);
     fclose(f_in);

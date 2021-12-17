@@ -12,7 +12,7 @@ diretorio='./results'
 def getGroupTable(group: str, size: int, columns: list = None) -> pd.DataFrame:
     # Executa likwid no terminal
 
-    cmd = f"likwid-perfctr -C 3 -g { group } -o { diretorio }/{ size }.{ group }.csv -f -m ./trab1 > { diretorio }/resultado_{ size }.res < { diretorio }/sistemas_{ size }.res"
+    cmd = f"likwid-perfctr -C 3 -g { group } -o { diretorio }/{ size }.{ group }.csv -f -m ./principal  { diretorio }/sistemas_{ size }.res > { diretorio }/resultado_{ size }.res"
     print (cmd)
     os.system(cmd)
 

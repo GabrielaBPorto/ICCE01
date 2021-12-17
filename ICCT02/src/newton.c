@@ -65,7 +65,7 @@ void alocacaoVariaveis(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void leituraEquacoes(int n){
+void leituraEquacoes(int n, FILE *input){
 	int length;
 	for (int i = 0; i < n; i++)
 	{
@@ -83,12 +83,13 @@ void leituraEquacoes(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void leituraVariaveis(int n){
-	leituraEquacoes(n);
+void leituraVariaveis(int n, FILE *input){
+	leituraEquacoes(n, input);
 	for (int i = 0; i < n; i++)
 	{
 		fscanf(input,"%lf", &helper);
 		resultados[i] = helper;
+		printf("%lf ", resultados[i]);
 	}
 	fscanf(input,"%lf\n", &epsilon);
 	fscanf(input,"%d\n", &maxIter);
@@ -99,7 +100,7 @@ void leituraVariaveis(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Retorna o tempo de execução que levou para fazer o cálculo para essa iteração
-double escreveDerivadasParciais (int n){
+double escreveDerivadasParciais (int n, FILE *output){
 	double tempoExec = timestamp();
 	for (int i = 0; i < n; i++)
 	{
@@ -254,41 +255,41 @@ void calculaResultadoMatrizJacobiana(int n){
 // 			n: Tamanho do vetor
 //			tempos: Vetor que grava tempos por iteração de resposta
 // Retorna o tempo de cálculo utilizando o método de newton
-double newtonMethod(int n, double *tempos){
-	double tempoExec = timestamp();
-	int iter;
+// double newtonMethod(int n, double *tempos){
+// 	double tempoExec = timestamp();
+// 	int iter;
 
-	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
-	for (iter = 0; iter < maxIter; iter++)
-	{
-		impressaoResultados(n);
+// 	//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
+// 	for (iter = 0; iter < maxIter; iter++)
+// 	{
+// 		impressaoResultados(n);
 
-		LIKWID_MARKER_START("JacobianaTrab1");
-		tempos[2] = jacobianaMetodo(n);
-		LIKWID_MARKER_STOP("JacobianaTrab1");
+// 		LIKWID_MARKER_START("JacobianaTrab1");
+// 		tempos[2] = jacobianaMetodo(n);
+// 		LIKWID_MARKER_STOP("JacobianaTrab1");
 
-		//Verificação de parada
-		if (max(resultadoEquacoes, n) < epsilon){
-			return timestamp() - tempoExec;
-		}
+// 		//Verificação de parada
+// 		if (max(resultadoEquacoes, n) < epsilon){
+// 			return timestamp() - tempoExec;
+// 		}
 	
-		LIKWID_MARKER_START("PivoteamentoTrab1");
-		tempos[3] = gaussPivotearParcial(n);
-		LIKWID_MARKER_STOP("PivoteamentoTrab1");
-		if(tempos[3] == -1){
-			return -1;
-		}
+// 		LIKWID_MARKER_START("PivoteamentoTrab1");
+// 		tempos[3] = gaussPivotearParcial(n);
+// 		LIKWID_MARKER_STOP("PivoteamentoTrab1");
+// 		if(tempos[3] == -1){
+// 			return -1;
+// 		}
 
-		calculoResultadoX(n);
+// 		calculoResultadoX(n);
 
-		// Verificação de parada
-		if (max(resultadoJacobiana, n) < epsilon){
-			return timestamp() - tempoExec;
-		}
+// 		// Verificação de parada
+// 		if (max(resultadoJacobiana, n) < epsilon){
+// 			return timestamp() - tempoExec;
+// 		}
 				
-	}
-	return timestamp() - tempoExec;
-}
+// 	}
+// 	return timestamp() - tempoExec;
+// }
 
 // Calcula resultado
 // Objetivo: Função que calcula resultado à partir dos resultados do vetor de jacobiano
@@ -296,11 +297,9 @@ double newtonMethod(int n, double *tempos){
 // 			n: Tamanho do vetor
 // Não retorna nada
 void calculoResultadoX(int n){
-	LIKWID_MARKER_START("ResultadoJacobianaTrab1");
 	for(int i=0; i< n; i++){
 		resultados[i] -= resultadoJacobiana[i];
 	}
-	LIKWID_MARKER_STOP("ResultadoJacobianaTrab1");
 }
 
 
@@ -309,7 +308,7 @@ void calculoResultadoX(int n){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void impressaoResultados(int  n){
+void impressaoResultados(int  n, FILE *output){
 	fprintf(output,"#\n");
 	for (int i = 0; i < n; i++)
 	{
@@ -327,14 +326,12 @@ void impressaoResultados(int  n){
 // Não retorna nada
 double max(double *vetor, int n){
 
-	LIKWID_MARKER_START("MaxTrab1");
 	double max = fabs(vetor[0]);
 	for(int i=0; i<n;i++){
 		if(fabs(max) < fabs(vetor[i])){
 			max = fabs(vetor[i]);
 		}
 	}
-	LIKWID_MARKER_STOP("MaxTrab1");
 	return max;
 }
 
@@ -344,9 +341,9 @@ int trabalho1(FILE *input,FILE *output){
   	LIKWID_MARKER_START("StartNewtonTrab1");
 
 	// Declaração de variavel
-	int dim;
+	int dim, i, j,k, iter, term;
 	void *eval;
-	double tempos[4];
+	double tempos[4], tempoExec;
 
 	printf("Tratou saida\n");
 
@@ -358,15 +355,122 @@ int trabalho1(FILE *input,FILE *output){
 		LIKWID_MARKER_STOP("AlocVariavelTrab1");
 
 		LIKWID_MARKER_START("LeVariavelTrab1");
-		leituraVariaveis(dim);
+		leituraVariaveis(dim, input);
 		LIKWID_MARKER_STOP("LeVariavelTrab1");
 
 		LIKWID_MARKER_START("EscreveParciaisTrab1");
-		tempos[1] = escreveDerivadasParciais(dim);
+		tempos[1] = escreveDerivadasParciais(dim, output);
 		LIKWID_MARKER_STOP("EscreveParciaisTrab1");
 
 		LIKWID_MARKER_START("MetodoNewtonTrab1");
-		tempos[0] = newtonMethod(dim, tempos);
+
+		// Método de Newton
+		// Objetivo: Devolver uma solução refinada para o Sistema linear passado
+		// Variaveis:
+		// 			n: Tamanho do vetor
+		//			tempos: Vetor que grava tempos por iteração de resposta
+		tempoExec = timestamp();
+
+		//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
+		for (iter = 0; iter < maxIter; iter++)
+		{
+			impressaoResultados(dim, output);
+
+			LIKWID_MARKER_START("JacobianaTrab1");
+			tempoExec = timestamp();	
+
+			// Metodo de jacobi
+			// Objetivo: Criar matriz jacobiana para a resposta atual
+			for (i = 0; i < dim; i++)
+			{	
+				for (j = 0; j < dim; j++)
+				{
+					jacobiana[(i*dim)+j] = evaluator_evaluate(derivadas[(i*dim)+j], dim, (char **)variaveis, resultados);
+				}
+				eval = evaluator_create(equacoes[i]);
+				assert(eval);
+				resultadoEquacoes[i] = evaluator_evaluate(eval, dim, (char **)variaveis, resultados);
+			}
+			// O tempo de cálculo utilizando o método de newton
+			tempos[2] = timestamp() - tempoExec;
+			
+			LIKWID_MARKER_STOP("JacobianaTrab1");
+
+			//Verificação de parada
+			LIKWID_MARKER_START("MaxTrab1");
+			if (max(resultadoEquacoes, dim) < epsilon){
+				tempos[0] = timestamp() - tempoExec;
+			}
+			LIKWID_MARKER_STOP("MaxTrab1");
+		
+			LIKWID_MARKER_START("PivoteamentoTrab1");
+
+			// Pivoteamento parcial de Gauss
+			// Objetivo: Aplicar Gauss com Pivoteamento Parcial para refinar a resposta
+			// Variaveis:
+			// 			n: Tamanho do vetor
+			// Retorna o tempo de cálculo utilizando o método de newton
+			tempoExec = timestamp();
+
+			
+			for(i=0;i<dim;i++){
+				// Pivoteamento parcial
+				for(k=i+1;k<dim;k++){
+					// Caso o elemento da diagonal for menor que os termos abaixo
+					if(fabs(jacobiana[(i*dim)+i])<fabs(jacobiana[(k*dim)+i])){
+						//Troca as linhas
+						LIKWID_MARKER_START("TrocaLinhasTrab1");
+						trocaLinhas(dim,i,k);
+						LIKWID_MARKER_STOP("TrocaLinhasTrab1");
+					}
+				}
+				
+				//Realiza eliminação de gauss
+				LIKWID_MARKER_START("EliminacaoGaussTrab1");
+				// Eliminação de Gauss
+				// Objetivo: Faz a eliminação de Gauss
+				// Variaveis:
+				// 			n: Tamanho do vetor
+				//			i: Iteração 1
+				for(k=i+1;k<dim;k++){
+					// Caso for 0 vai jogar para mensagem de erro
+					if(jacobiana[(i*dim)+i] != 0){
+						term= jacobiana[(k*dim)+i]/ jacobiana[(i*dim)+i];
+						for( j=0;j<dim;j++){
+							jacobiana[(k*dim)+j]=jacobiana[(k*dim)+j]-term*jacobiana[(i*dim)+j];
+						}
+						resultadoEquacoes[k] = resultadoEquacoes[k] - term * resultadoEquacoes[i];				
+					}
+					else{
+						return -1;		
+					}
+				}
+				LIKWID_MARKER_STOP("EliminacaoGaussTrab1");
+			}
+			LIKWID_MARKER_START("EscreveParciaisTrab1");
+			calculaResultadoMatrizJacobiana(dim);
+			LIKWID_MARKER_STOP("EscreveParciaisTrab1");
+			
+			tempos[3] = timestamp() - tempoExec;
+			LIKWID_MARKER_STOP("PivoteamentoTrab1");
+			if(tempos[3] == -1){
+				return -1;
+			}
+
+			LIKWID_MARKER_START("ResultadoJacobianaTrab1");
+			calculoResultadoX(dim);
+			LIKWID_MARKER_STOP("ResultadoJacobianaTrab1");
+
+			// Verificação de parada
+			LIKWID_MARKER_START("MaxTrab1");
+			if (max(resultadoJacobiana,dim) < epsilon){
+				return timestamp() - tempoExec;
+			}
+			LIKWID_MARKER_STOP("MaxTrab1");
+					
+		}
+		// Finalização metodo de newton
+		tempos[0] =  timestamp() - tempoExec;
 		if(tempos[0] == -1){
 			return -1;
 		}

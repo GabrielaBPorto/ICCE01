@@ -10,7 +10,6 @@
 #define TAM_BUFFER 256
 
 // Declaração de variaveis globais.
-FILE *output, *input;
 double *resultados, *jacobiana, *resultadoJacobiana, helper, maxJacobiana, maxEval, epsilon, *resultadoEquacoes;
 char equacoes[TAM_BUFFER][TAM_BUFFER], temp[TAM_BUFFER], **variaveis;
 void **derivadas, *eval;
@@ -19,13 +18,13 @@ int maxIter;
 // Funções 
 FILE* trataSaida(int argc, char *argv[]);
 void alocacaoVariaveis(int n);
-void leituraEquacoes(int n);
-void leituraVariaveis(int n);
-double escreveDerivadasParciais(int n);
+void leituraEquacoes(int n, FILE *input);
+void leituraVariaveis(int n, FILE *input);
+double escreveDerivadasParciais (int n, FILE *output);
 void liberacaoMemoriaUsada(int n);
 double newtonMethod(int n, double *tempos);
 double jacobianaMetodo(int n);
-void impressaoResultados(int  n);
+void impressaoResultados(int  n, FILE *output);
 double gaussPivotearParcial(int n);
 double max(double *vetor, int n);
 void calculaResultadoMatrizJacobiana(int n);
