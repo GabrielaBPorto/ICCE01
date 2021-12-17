@@ -235,7 +235,7 @@ void trocaLinhas(int n, int i, int k){
 // Variaveis:
 // 			n: Tamanho do vetor
 // Não retorna nada
-void calculaResultadoMatrizJacobiana(int n){
+void  calculaResultadoMatrizJacobiana(int n){
 	int j;
 	for (int i = n-1; i >= 0; i--)
 	{
@@ -366,7 +366,7 @@ int trabalho1(FILE *input,FILE *output){
 		// Variaveis:
 		// 			n: Tamanho do vetor
 		//			tempos: Vetor que grava tempos por iteração de resposta
-		tempoExec = timestamp();
+		tempos[0] = timestamp();
 
 		//Loop epsilon < max resultadoJacobiana, epsilon < max F(x) , iter < maxIter
 		for (iter = 0; iter < maxIter; iter++)
@@ -396,7 +396,7 @@ int trabalho1(FILE *input,FILE *output){
 			//Verificação de parada
 			LIKWID_MARKER_START("MaxTrab1");
 			if (max(resultadoEquacoes, dim) < epsilon){
-				tempos[0] = timestamp() - tempoExec;
+				tempos[0] = timestamp() - tempos[0];
 			}
 			LIKWID_MARKER_STOP("MaxTrab1");
 		
@@ -467,7 +467,7 @@ int trabalho1(FILE *input,FILE *output){
 					
 		}
 		// Finalização metodo de newton
-		tempos[0] =  timestamp() - tempoExec;
+		tempos[0] =  timestamp() - tempos[0];
 		if(tempos[0] == -1){
 			return -1;
 		}

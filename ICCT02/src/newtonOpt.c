@@ -11,6 +11,8 @@
 #include <string.h>
 #include <likwid.h>
 
+#define PAD(n) (isPot2(n)?(n+1):(n))
+
 // Função de tratamento de saida -o
 // Objetivo: Verificar se o usuário está fazendo / para saida diferente de stdout, e retornando ponteiro para leitura
 // Variaveis:
@@ -46,13 +48,13 @@ FILE* trataSaidaOpt(int argc, char *argv[]){
 // n: Tamanho do vetor
 // Não retorna nada
 void alocacaoVariaveisOpt(int n){	
-	resultadosOpt = calloc(n, sizeof(double));
-	resultadoJacobianaOpt = calloc(n, sizeof(double));
-	equacoes = (void **)malloc(n * sizeof(void*));
-	derivadas = (void**)malloc(n * n * sizeof(void*));
-	jacobianaOpt = calloc(n*n, sizeof(double));
-	variaveis = calloc(n, sizeof(char *));
-	resultadoEquacoes = calloc(n, sizeof(double));
+	resultadosOpt = calloc(PAD(n), sizeof(double));
+	resultadoJacobianaOpt = calloc(PAD(n), sizeof(double));
+	equacoes = (void **)malloc(PAD(n) * sizeof(void*));
+	derivadas = (void**)malloc(n * PAD(n) * sizeof(void*));
+	jacobianaOpt = calloc(n*PAD(n), sizeof(double));
+	variaveis = calloc(PAD(n), sizeof(char *));
+	resultadoEquacoes = calloc(PAD(n), sizeof(double));
 
 	for (int i = 0; i < n; i++){
 		variaveis[i] = calloc(8, sizeof(char));
@@ -111,7 +113,6 @@ void leituraVariaveisOpt(int n, FILE *input, double *epsilon, int *maxIter){
 // 			n: Tamanho do vetor
 // Retorna o tempo de execução que levou para fazer o cálculo para essa iteração
 double escreveDerivadasParciaisOpt (int n, FILE *output){
-	void *eval;
 	double tempoExec = timestamp();
 	for (int i = 0; i < n; i++)
 	{
@@ -415,7 +416,7 @@ int trabalho2(FILE *input, FILE *output){
 
 		// Método de Newton
 		// Objetivo: Devolver uma solução refinada para o Sistema linear passado
-		tempoExec = timestamp();
+		tempos[0] = timestamp();
 
 		//Loop epsilon < max resultadoJacobianaOpt, epsilon < max F(x) , iter < maxIter
 		for (iter = 0; iter < maxIter; iter++)
@@ -450,7 +451,7 @@ int trabalho2(FILE *input, FILE *output){
 
 			//Verificação de parada
 			if (maxOpt(resultadoEquacoes, dim) < epsilon){
-				tempos[0] = timestamp() - tempoExec;
+				break;
 			}
 		
 			LIKWID_MARKER_START("PivoteamentoTrab2");
@@ -511,14 +512,12 @@ int trabalho2(FILE *input, FILE *output){
 
 			// Verificação de parada
 			if (maxOpt(resultadoJacobianaOpt,dim) < epsilon){
-				return timestamp() - tempoExec;
+				break;
 			}					
 		}
 		// Finalização metodo de newton
-		tempos[0] =  timestamp() - tempoExec;
-		if(tempos[0] == -1){
-			return -1;
-		}
+		tempos[0] =  timestamp() - tempos[0];
+
 		LIKWID_MARKER_STOP("MetodoNewtonTrab2");
 
 		LIKWID_MARKER_START("LiberaMemoriaTrab2");

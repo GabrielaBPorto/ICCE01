@@ -10,17 +10,17 @@ TODO LIST:
     - VARIAVEIS LOCAIS [Eeeeeh]
     - Ao invés das strings, alocar diretamente as funções (Leitura Equacoes) [DONE]
     - Alocação mt doida do professor (Alocacao variaveis)
-    - PADDING (alocacao variaveis)
+    - PADDING (alocacao variaveis) [DONE]
     - derivadasParciais escrever porque não adianta dar unroll
     - liberar memória usando a alocação do professor (mata o loop)
     - jacobiana unroll loop interno [DONE]
-    - pensar sobre pivoteamentoGauss internet
+    - pensar sobre pivoteamentoGauss internet [Não tem como melhorar até onde encontrei]
     - eliminacao de Gauss tirar o if e fazer for separados [DONE]
     - melhorar o for da troca de linhas [DONE]
     - pesquisar otimização pivoteamento (calculoResultadoMatrizJacobiana) [DONE]
     - jogar ifs para condição do loop (tempo e ver qual dos outros)
     - super unroll do calcularesultadoX [DONE]
-    - comparacao em pares no max 
+    - comparacao em pares no max [Não chega a ser melhor]
 
 
 Foi feita a separação do código por que por causa das flags utilizadas está roland oparalelização do código de maneira ineficaz

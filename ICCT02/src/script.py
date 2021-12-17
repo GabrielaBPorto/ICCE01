@@ -86,6 +86,7 @@ for size in expected_sizes:
 
         dfFinal=dfFinal.append(dfr)
 
+print('Iniciando criação das imagens')
 dfFinal[['region', 'n_size']]= dfFinal.index.tolist()
 dfFinal.to_csv(f"{diretorio}/tabelaFinal.csv")
 for marker in markers:
