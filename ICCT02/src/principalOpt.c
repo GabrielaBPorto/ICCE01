@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
-#include "newton.h"
 #include "utils.h"
+#include "newtonOpt.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,11 +16,11 @@ int main(int argc, char *argv[])
     rewind(f_in);
 
     FILE *f_out = stdout;
-
-    f_out = fopen(markerName("resultado_", n), "w+");
-    trabalho1(f_in, f_out);
+    
+    f_out = fopen(markerName("resultadoOpt_", n), "w+");
+    int variavel = trabalho2(f_in, f_out);
     fclose(f_out);
-    rewind(f_in);
-
+    fclose(f_in);
+    printf("Finalizado trab 2, %d\n", variavel);
     return 0;
 }

@@ -1,4 +1,4 @@
-       PROG   = principal
+       PROG   = principal principalOpt
 
            CC = gcc # -std=c11
          OBJS = utils.o newton.o newtonOpt.o

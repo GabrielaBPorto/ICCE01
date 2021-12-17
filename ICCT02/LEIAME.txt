@@ -1,13 +1,13 @@
 TODO LIST:
-- Marcadores AVX para o trab1
+- Marcadores AVX para o trab1 [DONE]
 - Arquivos para o trab2 [DONE]
 - Correção do bug -o [DONE]
 - Fazer arquivo para chamar os trab1 e 2 na mesma chamada (estilo ex. 03) [DONE]
-- Corrigir script para fazer gráfico por marcador
+- Corrigir script para fazer gráfico por marcador 
 - Finalização de marcadores no trab1 [DONE]
 - Definição dos marcadores no trab2 [DONE]
 - Otimizações:
-    - VARIAVEIS LOCAIS
+    - VARIAVEIS LOCAIS [DONE]
     - Ao invés das strings, alocar diretamente as funções (Leitura Equacoes)
     - Alocação mt doida do professor (Alocacao variaveis)
     - PADDING (alocacao variaveis)
@@ -21,3 +21,6 @@ TODO LIST:
     - jogar ifs para condição do loop (tempo e ver qual dos outros)
     - super unroll do calcularesultadoX
     - comparacao em pares no max 
+
+
+Foi feita a separação do código por que por causa das flags utilizadas está roland oparalelização do código de maneira ineficaz

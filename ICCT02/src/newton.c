@@ -89,7 +89,6 @@ void leituraVariaveis(int n, FILE *input){
 	{
 		fscanf(input,"%lf", &helper);
 		resultados[i] = helper;
-		printf("%lf ", resultados[i]);
 	}
 	fscanf(input,"%lf\n", &epsilon);
 	fscanf(input,"%d\n", &maxIter);
